@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="63" height="31" viewBox="0 0 63 31">
+  <g id="giro-card" transform="translate(1816 -1259)">
+    <g id="Group_2419" data-name="Group 2419" transform="translate(-1908 916)">
+      <path id="Subtraction_2" data-name="Subtraction 2" d="M9.112,18.224A9.044,9.044,0,0,1,2.62,15.505L8.855,9.27a1.8,1.8,0,0,0,.215-.259.991.991,0,0,0,.658.25,1.014,1.014,0,0,0,.713-.293.98.98,0,0,0,.257-.45l.879-3.3a.992.992,0,0,0-.171-.865.991.991,0,0,0-1.052-.358l-3.3.879A1,1,0,0,0,6.558,6.5a1.817,1.817,0,0,0-.259.215L.612,12.4A9.112,9.112,0,0,1,16.8,4.219L9.814,11.2a1.842,1.842,0,0,0-.216.259.989.989,0,0,0-.657-.25,1.014,1.014,0,0,0-.713.293.975.975,0,0,0-.257.449l-.879,3.3a.991.991,0,0,0,.172.865,1,1,0,0,0,.789.393,1.037,1.037,0,0,0,.263-.035l3.3-.879a1,1,0,0,0,.492-1.627,1.818,1.818,0,0,0,.26-.216l5.784-5.784a9.117,9.117,0,0,1-9.042,10.25Z" transform="translate(92 349.47)" fill="#707070"/>
+      <text id="giro" transform="translate(115 362)" fill="#707070" font-size="20" font-family="Montserrat-Bold, Montserrat" font-weight="700" letter-spacing="-0.04em"><tspan x="0" y="0">giro</tspan></text>
+    </g>
+    <text id="Card" transform="translate(-1776 1288)" fill="#707070" font-size="9" font-family="Muli-ExtraBold, Muli" font-weight="800" letter-spacing="-0.02em"><tspan x="0" y="0">card</tspan></text>
+  </g>
+</svg>
