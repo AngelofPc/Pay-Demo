@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "717342276434",
+    "project_id": "demobills-dd665",
+    "storage_bucket": "demobills-dd665.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717342276434:android:04e6937180cb3b6034d88b",
+        "android_client_info": {
+          "package_name": "com.demobills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717342276434-t8nc7cisa66mjfl4tg2cko6fa17ho8mt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demobills",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "717342276434-3hvu5pbskd2bmjhls3dp2eojji9lqv2k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwxQsyx_SODt0GI2zxYjqaOv81QNcRDy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717342276434-3hvu5pbskd2bmjhls3dp2eojji9lqv2k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717342276434:android:b97c390115c8791434d88b",
+        "android_client_info": {
+          "package_name": "com.demopay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717342276434-3hvu5pbskd2bmjhls3dp2eojji9lqv2k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwxQsyx_SODt0GI2zxYjqaOv81QNcRDy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717342276434-3hvu5pbskd2bmjhls3dp2eojji9lqv2k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717342276434:android:9ff140871f9a2f5234d88b",
+        "android_client_info": {
+          "package_name": "com.featherpay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717342276434-3hvu5pbskd2bmjhls3dp2eojji9lqv2k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwxQsyx_SODt0GI2zxYjqaOv81QNcRDy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717342276434-3hvu5pbskd2bmjhls3dp2eojji9lqv2k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

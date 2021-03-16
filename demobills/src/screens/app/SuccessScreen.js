@@ -67,7 +67,7 @@ const CabaEnterAmountScreen = (props) => {
           )}
           {action === 'transfer' && (
             <Text style={styles.text}>
-              Your transaction of N7,500 with {'\n'}
+              Your transaction of ₦{route.params.amount} with {'\n'}
               <Text style={styles.bold}>Gboriyemi David</Text> was successful.
             </Text>
           )}

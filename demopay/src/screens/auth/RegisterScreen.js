@@ -1,174 +1,222 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  Image,
   View,
+  Dimensions,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {normalize} from 'react-native-elements';
+
 import AppButton from '../../components/global/AppButton';
-
-import AppInput from '../../components/global/AppInput';
-
-import AppLink from '../../components/global/AppLink';
-import BottomCard from '../../components/section/BottomCard';
-import Fonts from '../../styles/Fonts';
 import Colors from '../../styles/Colors';
-
-import {Icon} from 'react-native-elements';
+import Fonts from '../../styles/Fonts';
+import AppInput from '../../components/global/AppInput';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {AppScreenWithoutScroll} from '../../components/global/AppScreen';
+import AppLink from '../../components/global/AppLink';
 import AppKeyboardView from '../../components/global/AppKeyboardView';
 
 import DemoPayLogo from '../../assets/images/svg/demopay-logo.svg';
 
-const {width, height} = Dimensions.get('screen');
+import {Context as AppContext} from '../../context/AppContext';
 
-const AuthActionScreen = (props) => {
-  const [phoneNumber, setPhoneNumber] = useState(null);
-  const [password, setPassword] = useState(null);
+const {height} = Dimensions.get('screen');
 
-  const phoneInputHandler = (input) => {
-    setPhoneNumber(input);
+const LoginScreen = (props) => {
+  const {state, register, clearResponse} = useContext(AppContext);
+
+  const [username, setUsername] = useState('ace');
+  const [wallet, setWallet] = useState('aceoluwapelumi101');
+  const [password, setPassword] = useState('12345678');
+  // const [isSending, setIsSending] = useState(false);
+  const {isSending, response} = state;
+
+  const walletInputHandler = (input) => {
+    setWallet(input);
+  };
+  const usernameInputHandler = (input) => {
+    setUsername(input);
   };
 
   const passwordInputHandler = (input) => {
     setPassword(input);
   };
-
   const {navigation} = props;
   return (
-    // <AppScreen>
-
-    <AppKeyboardView
-      enableOnAndroid={true}
-      style={{
-        backgroundColor: Colors.ACCENT,
-        flexDirection: 'column-reverse',
-        paddingHorizontal: RFValue(20),
-      }}>
-      {/* <BottomCard style={styles.bottomCard}> */}
-
-      <View
-        style={{
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          marginBottom: RFPercentage(8),
-          height: RFValue(150),
-        }}>
-        {/* <Image source={require('../../assets/images/')} /> */}
-        <DemoPayLogo />
-        <Text
-          style={{
-            marginTop: RFPercentage(2),
-            fontSize: RFPercentage(3),
-            color: Colors.WHITE,
-            fontFamily: Fonts.Mont.BOLD,
-          }}>
-          Register
-        </Text>
-      </View>
-
-      <View
-        style={{
-          marginVertical: RFValue(20),
-          marginBottom: RFPercentage(10),
-        }}>
-        {/* <View style={styles.back}>
-          <Icon
-            // raised
+    <AppScreenWithoutScroll style={{backgroundColor: Colors.ACCENT}}>
+      <View>
+        <View style={styles.back}>
+          {/* <Icon
+            size={20}
             name="chevron-left"
             type="font-awesome"
-            color={Colors.BLACK}
-            size={20}
+            color={Colors.WHITE}
             onPress={() => navigation.goBack()}
-          />
-          <Text style={styles.backText}>Register</Text>
-        </View> */}
-        <AppInput
-          placeholder="Username"
-          placeholderTextColor={Colors.GREY}
-          style={styles.input}
-          onChangeText={phoneInputHandler}
-          value={phoneNumber}
-        />
-
-        <AppInput
-          placeholder="Email Address"
-          placeholderTextColor={Colors.GREY}
-          style={styles.input}
-          onChangeText={phoneInputHandler}
-          value={phoneNumber}
-        />
-        <AppInput
-          type="password"
-          placeholder="Password"
-          placeholderTextColor={Colors.GREY}
-          style={styles.input}
-          rightIcon="lock"
-          onChangeText={passwordInputHandler}
-          value={password}
-        />
-
-        <AppButton
-          onPress={() => {
-            navigation.navigate('App');
-          }}
-          style={styles.button}>
-          <Text style={styles.buttonText}>Continue</Text>
-        </AppButton>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Text
-            style={{
-              fontFamily: Fonts.Muli.REGULAR,
-              color: Colors.LIGHTGREY,
-              fontSize: RFPercentage(1.6),
-            }}>
-            Don't have an account?{''}
-          </Text>
-          <AppLink
-            onPress={() => {
-              navigation.navigate('LoginScreen');
-            }}
-            color={Colors.PRIMARY}>
-            {' '}
-            Login
-          </AppLink>
+          /> */}
         </View>
+        <View style={styles.imageContainer}>
+          <DemoPayLogo />
+          {/* <Image
+            // style={{width: '100%', height: height / 3.1}}
+            resizeMode="contain"
+            source={require('../../assets/images/png/giro-logo.png')}
+          /> */}
+        </View>
+        <Text style={styles.welcomeText}>Register </Text>
+        {response && (
+          <Text style={{color: Colors.RED, textAlign: 'center'}}>
+            {response.message}
+          </Text>
+        )}
       </View>
-      {/* </BottomCard> */}
-    </AppKeyboardView>
-    // </ImageBackground>
-    // {/* </KeyboardAvoidingView> */}
-    // </AppScreen>
+      <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
+        {/* <BottomCard> */}
+        <View style={{marginVertical: RFValue(10)}}>
+          <AppInput
+            color={Colors.WHITE}
+            placeholder="usernmae"
+            placeholderTextColor={Colors.GREY}
+            style={{width: '100%', marginBottom: -14}}
+            rightIconSize={26}
+            onChangeText={usernameInputHandler}
+            value={username}
+          />
+
+          <AppInput
+            color={Colors.WHITE}
+            placeholder="wallet Id"
+            keyboardType="number-pad"
+            placeholderTextColor={Colors.GREY}
+            style={{width: '100%', marginBottom: -14}}
+            rightIconSize={26}
+            onChangeText={walletInputHandler}
+            value={wallet}
+          />
+          <AppInput
+            color={Colors.WHITE}
+            type="password"
+            placeholder="Password"
+            placeholderTextColor={Colors.GREY}
+            style={{width: '100%', marginBottom: -14}}
+            rightIcon="lock"
+            onChangeText={passwordInputHandler}
+            value={password}
+          />
+
+          <AppButton
+            onPress={() => {
+              register({username, wallet, password});
+              // navigation.navigate('App');
+            }}
+            style={styles.button}>
+            {!isSending ? (
+              'Register'
+            ) : (
+              <ActivityIndicator color={Colors.WHITE} />
+            )}
+          </AppButton>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <Text
+              style={{
+                color: Colors.LIGHTGREY,
+                fontFamily: Fonts.Muli.REGULAR,
+                fontSize: RFPercentage(1.6),
+              }}>
+              Already have an account?{' '}
+            </Text>
+            <AppLink
+              onPress={() => {
+                navigation.navigate('LoginScreen');
+              }}
+              color={Colors.PRIMARY}>
+              Login
+            </AppLink>
+          </View>
+        </View>
+        {/* </BottomCard> */}
+      </AppKeyboardView>
+    </AppScreenWithoutScroll>
   );
 };
 
-export default AuthActionScreen;
+LoginScreen.setOptions = {
+  headerShown: true,
+  title: 'My home',
+  headerStyle: {
+    backgroundColor: Colors.WHITE,
+  },
+  headerTintColor: '#fff',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+};
 
 const styles = StyleSheet.create({
-  imageBackground: {
-    width: '100%',
-    // position: 'absolute',
-    height: height,
-    flexDirection: 'column-reverse',
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.WHITE,
   },
   back: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    marginVertical: 10,
+    marginLeft: 20,
     flexDirection: 'row',
-    marginBottom: RFValue(10),
+    zIndex: 1000,
+    justifyContent: 'space-between',
   },
   backText: {
     fontFamily: Fonts.Muli.BOLD,
     color: Colors.BLACK,
     fontSize: RFPercentage(2),
-    marginLeft: RFValue(15),
-    marginTop: RFValue(-3),
+    marginLeft: '82%',
+    textAlign: 'right',
+    textAlignVertical: 'center',
   },
-  input: {
+  imageContainer: {
+    marginTop: RFValue(140),
     width: '100%',
-    marginBottom: -14,
+    height: RFValue(150),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  text: {
+    marginVertical: normalize(10),
+    textAlign: 'center',
+    fontSize: normalize(20),
+    fontWeight: 'bold',
+    color: Colors.BLACK,
+  },
+  welcomeText: {
+    textAlign: 'center',
+    fontFamily: Fonts.Mont.BOLD,
+    fontSize: RFValue(20),
+    color: Colors.WHITE,
+    marginBottom: RFValue(10),
+  },
+  forgotPassword: {
+    color: Colors.GREY,
+    textAlign: 'right',
+    fontFamily: Fonts.Muli.BOLD,
+    marginVertical: RFValue(3),
+  },
+  bottomCardKeyboardContainer: {
+    paddingHorizontal: RFValue(20),
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
   },
   button: {
-    marginVertical: RFValue(15),
+    marginVertical: 20,
+  },
+  buttonText: {
+    color: Colors.WHITE,
   },
 });
+
+export default LoginScreen;

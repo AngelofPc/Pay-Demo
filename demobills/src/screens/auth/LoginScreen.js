@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {View, Dimensions, Text, StyleSheet, Image} from 'react-native';
+import React, {useEffect, useState, useContext} from 'react';
+import {
+  View,
+  Dimensions,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Image,
+} from 'react-native';
 import {Icon, normalize} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -17,14 +24,20 @@ import AppKeyboardView from '../../components/global/AppKeyboardView';
 
 import DemoPayLogo from '../../assets/images/svg/demopay-logo.svg';
 
+import {Context as AppContext} from '../../context/AppContext';
+
 const {height} = Dimensions.get('screen');
 
 const LoginScreen = (props) => {
-  const [phoneNumber, setPhoneNumber] = useState(null);
-  const [password, setPassword] = useState(null);
+  const {state, login, clearResponse} = useContext(AppContext);
 
-  const phoneInputHandler = (input) => {
-    setPhoneNumber(input);
+  const [wallet, setWallet] = useState('angelofpc101');
+  const [password, setPassword] = useState('12345678');
+  // const [isSending, setIsSending] = useState(false);
+  const {isSending, response} = state;
+
+  const walletInputHandler = (input) => {
+    setWallet(input);
   };
 
   const passwordInputHandler = (input) => {
@@ -51,21 +64,23 @@ const LoginScreen = (props) => {
             source={require('../../assets/images/png/giro-logo.png')}
           /> */}
         </View>
-        <Text style={styles.welcomeText}>Login</Text>
+        <Text style={styles.welcomeText}>Login </Text>
       </View>
       <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
         {/* <BottomCard> */}
         <View style={{marginVertical: RFValue(10)}}>
           <AppInput
+            color={Colors.WHITE}
             placeholder="Email"
             keyboardType="number-pad"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}
-            onChangeText={phoneInputHandler}
-            value={phoneNumber}
+            onChangeText={walletInputHandler}
+            value={wallet}
           />
           <AppInput
+            color={Colors.WHITE}
             type="password"
             placeholder="Password"
             placeholderTextColor={Colors.GREY}
@@ -77,10 +92,11 @@ const LoginScreen = (props) => {
 
           <AppButton
             onPress={() => {
-              navigation.navigate('App');
+              login({wallet, password});
+              // navigation.navigate('App');
             }}
             style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
+            {!isSending ? 'Login' : <ActivityIndicator color={Colors.WHITE} />}
           </AppButton>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text
@@ -179,6 +195,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 20,
+  },
+  buttonText: {
+    color: Colors.WHITE,
   },
 });
 

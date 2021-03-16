@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -18,10 +18,14 @@ import BottomCard from '../../components/section/BottomCard';
 import WalletCard from '../../components/global/WalletCard';
 import {BackBtn} from '../../components/global/BackButton';
 
+import {Context as AppContext} from '../../context/AppContext';
+
 const {width, height} = Dimensions.get('screen');
 
 const CabaEnterAmountScreen = (props) => {
   const {navigation, route} = props;
+
+  const {state, fundWallet, response, clearResponse} = useContext(AppContext);
 
   const {action} = route.params;
 
@@ -40,10 +44,11 @@ const CabaEnterAmountScreen = (props) => {
   const nextHandler = () => {
     setLoading(true);
     if (action === 'transfer') {
-      navigation.navigate('AccountScreen');
+      navigation.navigate('AccountScreen', {amount});
     } else {
       setTimeout(() => {
-        navigation.navigate('SuccessScreen', {action: 'fund'});
+        fundWallet({amount});
+        // navigation.navigate('SuccessScreen', {action: 'fund'});
         setLoading(false);
       }, 3000);
     }
@@ -76,11 +81,14 @@ const CabaEnterAmountScreen = (props) => {
               onPress={() => {
                 navigation.navigate('FundAmountScreen');
               }}
-              amount="225,000"
+              amount={state.balance}
             />
           </View>
         )}
       </View>
+      {response && (
+        <Text style={{color: Colors.WHITE}}>{response.message}</Text>
+      )}
       <BottomCard style={{backgroundColor: Colors.BLACK}}>
         <View
           style={{

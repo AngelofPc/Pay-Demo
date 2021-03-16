@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -18,13 +18,14 @@ import BottomCard from '../../components/section/BottomCard';
 import WalletCard from '../../components/global/WalletCard';
 import {BackBtn} from '../../components/global/BackButton';
 
+import {Context as AppContext} from '../../context/AppContext';
 const {width, height} = Dimensions.get('screen');
 
 const CabaEnterAmountScreen = (props) => {
   const {navigation, route} = props;
 
   const {action} = route.params;
-  console.log(action);
+  const {state, fundWallet, response, clearResponse} = useContext(AppContext);
 
   const [amount, setAmount] = useState('');
   const [visible, setVisible] = useState(false);
@@ -44,7 +45,7 @@ const CabaEnterAmountScreen = (props) => {
       navigation.navigate('AccountScreen');
     } else {
       setTimeout(() => {
-        navigation.navigate('SuccessScreen', {action: 'fund'});
+        fundWallet({amount});
         setLoading(false);
       }, 3000);
     }
@@ -77,7 +78,7 @@ const CabaEnterAmountScreen = (props) => {
               onPress={() => {
                 navigation.navigate('FundAmountScreen');
               }}
-              amount="225,000"
+              amount={state.balance}
             />
           </View>
         )}

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -16,6 +16,9 @@ import BottomCard from '../../components/section/BottomCard';
 
 import Colors from '../../styles/Colors';
 import Fonts from '../../styles/Fonts';
+
+import messaging from '@react-native-firebase/messaging';
+import {Context as AppContext} from '../../context/AppContext';
 
 const {width, height} = Dimensions.get('window');
 const transactions = [
@@ -82,10 +85,31 @@ const CabaTransactionModelScreen = (props) => {
   const {navigation} = props;
 
   const [visible, setVisible] = useState(false);
+  const [fcmToken, setfcmToken] = useState(null);
+
+  const {sendFcmToken, state, login, clearResponse} = useContext(AppContext);
 
   const toggleOverlay = () => {
     setVisible(!visible);
   };
+
+  useEffect(() => {
+    getFcmToken();
+
+    sendFcmToken({fcmToken});
+  }, [fcmToken]);
+
+  const getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      console.log(fcmToken);
+      console.log('Your Firebase Token is:', fcmToken);
+    } else {
+      console.log('Failed', 'No token received');
+    }
+  };
+
+  const {balance, transactions} = state;
 
   const transactionCard = ({item}) => {
     return (
@@ -106,8 +130,8 @@ const CabaTransactionModelScreen = (props) => {
             />
           </View>
           <View>
-            <Text style={styles.transactionCardText}>{item.details}</Text>
-            <Text style={styles.transactionCardTo}>{item.to}</Text>
+            <Text style={styles.transactionCardText}>{item.title}</Text>
+            <Text style={styles.transactionCardTo}>{item.summary}</Text>
           </View>
         </View>
         <View style={{justifyContent: 'center'}}>
@@ -149,11 +173,9 @@ const CabaTransactionModelScreen = (props) => {
         </View>
         <WalletCard
           // color={Colors.PRIMARY}
-          walletID="0124545454"
+
           textColor={Colors.WHITE}
-          amount="225,000"
-          cashback="65"
-          subtractedAmount="6,500"
+          amount={balance}
           onPress={() => {
             navigation.navigate('FundAmountScreen');
           }}

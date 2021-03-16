@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import trackerApi from '../../api/tracker';
 
 import DemoPayLogo from '../../assets/images/svg/demopay-logo.svg';
 import {AppScreenWithoutScroll} from '../../components/global/AppScreen';
@@ -8,6 +9,24 @@ import Colors from '../../styles/Colors';
 import Fonts from '../../styles/Fonts';
 
 const SplashScreen = ({navigation}) => {
+  useEffect(() => {
+    // const getMoviesFromApiAsync = async () => {
+    //   try {
+    //     let response = await fetch(
+    //       'https://fcm.googleapis.com/v1/projects/demobills-dd6651/messages:send',
+    //     );
+    //     let json = await response.json();
+    //     return json.movies;
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
+    // // const fcm = trackerApi.post(
+    // //   '',
+    // // );
+    // getMoviesFromApiAsync();
+  }, []);
+
   setTimeout(() => {
     navigation.navigate('LoginScreen');
   }, 3000);

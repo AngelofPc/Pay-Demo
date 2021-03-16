@@ -7,18 +7,40 @@ import Fonts from './../../styles/Fonts';
 import BottomCard from '../section/BottomCard';
 import Colors from './../../styles/Colors';
 
-export const ImageAlert = ({children, image, style}) => {
+export const ImageAlert = ({children, initial, image, style}) => {
   return (
     <BottomCard style={{...styles.bottomCard, ...style}}>
       <View style={styles.imageContainer}>
-        <Image
-          style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: RFPercentage(50),
-          }}
-          source={image}
-        />
+        {initial && (
+          <View
+            style={{
+              backgroundColor: Colors.PRIMARY,
+              height: '100%',
+              width: '100%',
+              justifyContent: 'center',
+              borderRadius: RFPercentage(50),
+            }}>
+            <Text
+              style={{
+                color: Colors.WHITE,
+                fontFamily: Fonts.Muli.BOLD,
+                fontSize: RFPercentage(6),
+                alignSelf: 'center',
+              }}>
+              {initial}
+            </Text>
+          </View>
+        )}
+        {image && (
+          <Image
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: RFPercentage(50),
+            }}
+            source={image}
+          />
+        )}
       </View>
       {children}
     </BottomCard>
