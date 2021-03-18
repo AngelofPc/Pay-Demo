@@ -24,7 +24,7 @@ export const ImageAlert = ({children, initial, image, style}) => {
               style={{
                 color: Colors.WHITE,
                 fontFamily: Fonts.Muli.BOLD,
-                fontSize: RFPercentage(6),
+                fontSize: RFPercentage(5),
                 alignSelf: 'center',
               }}>
               {initial}

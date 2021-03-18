@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -25,15 +25,38 @@ const {height} = Dimensions.get('screen');
 const CabaTransactionSummaryScreen = (props) => {
   const {navigation, route} = props;
 
-  const {state, transfer} = useContext(AppContext);
+  let {state, balance} = useContext(AppContext);
 
   // const [isSending, setIsSending] = useState(false);
   const {isSending, response} = state;
 
-  const {action, amount, data, walletName, sort} = route.params;
+  const {action, data} = route.params;
 
-  const wallet = data.wallet_id;
-  const username = data.username;
+  const transaction = JSON.parse(data.transaction);
+
+  const wallet = 'sasa';
+
+  const amount = data.amount;
+
+  const walletName = transaction.sender_wallet;
+  const wallet_id = transaction.sender_id;
+
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const transactions = state.transactions;
+  transactions.push(transaction);
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      // Prevent default behavior of leaving the screen
+      e.preventDefault();
+    });
+  });
 
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.BLACK}}>
@@ -45,34 +68,44 @@ const CabaTransactionSummaryScreen = (props) => {
           backgroundColor: Colors.BLACK,
         }}>
         <View style={styles.headingContainer}>
-          <BackBtn
+          {/* <BackBtn
             onPress={() => {
               navigation.goBack();
             }}
-          />
-          <Text style={styles.pageHeading}>Enter Information</Text>
+          /> */}
+        </View>
+        <Text style={styles.pageHeading}>Transfer Notification</Text>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Text
+            style={{
+              color: Colors.WHITE,
+              fontSize: RFValue(14),
+              marginTop: RFValue(120),
+              fontFamily: Fonts.Muli.SEMIBOLD,
+            }}>
+            {data.body}
+          </Text>
         </View>
       </View>
       <ImageAlert
         style={{position: 'absolute', bottom: 0, width: '100%'}}
-        initial={data.username.charAt(0).toUpperCase()}
-        // image={require('../../assets/images/png/image-avatar.png')}
-      >
+        initial={walletName.charAt(0).toUpperCase()}>
         <View style={styles.textGroup}>
           <Text style={styles.bankname}>{walletName}</Text>
-          <Text style={styles.username}>{data.username}</Text>
+          {/* <Text style={styles.username}>{username}</Text> */}
         </View>
 
-        <DetailCard leftText="Wallet Id" rightText={data.wallet_id} />
+        <DetailCard leftText="Wallet Id" rightText={wallet_id} />
         <DetailCard leftText="Amount" rightText={'₦' + amount} />
-        <DetailCard leftText="Convenience Charge" rightText="₦0" />
-        <DetailCard leftText="Total" rightText={'₦' + amount} />
+
         <View style={{marginVertical: RFValue(10), marginTop: RFPercentage(8)}}>
           {/* <AppLabelledInput inputLabel="Transaction Pin" /> */}
           <AppButton
             onPress={() => {
-              transfer({wallet, sort, amount, username});
-              // navigation.navigate('SuccessScreen', {action: 'transfer'});
+              setLoading(true);
+
+              balance({balance: data.wallet_bal, transaction, transactions});
+              navigation.push('HomeScreen');
             }}>
             {!isSending && 'Proceed'}
             {isSending && <ActivityIndicator color={Colors.WHITE} />}
@@ -157,6 +190,8 @@ const styles = StyleSheet.create({
   },
   pageHeading: {
     color: Colors.WHITE,
+    textAlign: 'center',
+    alignSelf: 'center',
     fontSize: RFPercentage(2),
     fontFamily: Fonts.Muli.BOLD,
     marginVertical: RFPercentage(1.6),

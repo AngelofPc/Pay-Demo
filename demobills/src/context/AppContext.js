@@ -19,9 +19,12 @@ const appReducer = (state, action) => {
 
     case 'login':
       return {
+        ...state,
         token: action.payload,
         balance: action.balance,
         transactions: action.transactions,
+        username: action.username,
+        wallet_id: action.wallet_id,
       };
 
     case 'fund_wallet':
@@ -29,6 +32,22 @@ const appReducer = (state, action) => {
         ...state,
         balance: action.balance,
         transaction_ref: action.transaction_ref,
+      };
+
+    case 'transfer':
+      return {
+        ...state,
+        transfer: action.payload,
+        balance: action.balance,
+        transactions: action.transactions,
+      };
+
+    case 'balance':
+      return {
+        ...state,
+        transfer: action.payload,
+        balance: action.balance,
+        transactions: action.transactions,
       };
 
     case 'change_password':
@@ -54,43 +73,6 @@ const appReducer = (state, action) => {
   }
 };
 
-// const login = async (walletId, password) => {
-//   console.log(walletId, password);
-
-//   try {
-//     // const
-//     setIsSending(true);
-
-//     if (res.status === 200) {
-//       setIsSending(false);
-//       await AsyncStorage.setItem('token', res.data.sessionToken);
-//       navigation.navigate('App');
-//     }
-//   } catch (error) {
-//     setIsSending(false);
-//     console.log(error);
-//   }
-// };
-
-// const register = async ({username, walletId, password}) => {
-//   console.log(username, walletId, password);
-
-//   console.log('asa');
-
-//   try {
-//     // const
-//     const res = await trackerApi.post('register', {
-//       username,
-//       wallet_id: walletId,
-//       password: password,
-//     });
-
-//     console.log(res.data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 const register = (dispatch) => async ({username, wallet, password}) => {
   try {
     dispatch({type: 'clear_response'});
@@ -107,13 +89,15 @@ const register = (dispatch) => async ({username, wallet, password}) => {
     }
 
     await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('username');
     // await AsyncStorage.setItem('token', loginRes.data.session_token);
-
     const res = await trackerApi.post('register', {
       username,
       wallet_id: wallet,
       password,
     });
+
+    console.log(res.data, res.status, 'sasas');
 
     setIsSending(dispatch, false);
     if (res.status === 200) {
@@ -121,13 +105,22 @@ const register = (dispatch) => async ({username, wallet, password}) => {
         wallet_id: wallet,
         password,
       });
-      await AsyncStorage.setItem('token', loginRes.data.session_token);
+
+      if (loginRes.status === 200) {
+        console.log(loginRes.data, loginRes.status);
+        await AsyncStorage.setItem('token', loginRes.data.session_token);
+        await AsyncStorage.setItem('username', loginRes.data.username);
+      } else {
+        console.log(loginRes.data, loginRes.status);
+      }
 
       dispatch({
         type: 'login',
         payload: loginRes.data.session_token,
         balance: loginRes.data.wallet_bal,
         transactions: loginRes.data.transactions,
+        username: loginRes.data.username,
+        wallet_id: loginRes.data.wallet_id,
       });
 
       // console.log(state);
@@ -147,7 +140,7 @@ const register = (dispatch) => async ({username, wallet, password}) => {
       payload: error.response.data,
     });
 
-    console.log(error.response.data);
+    console.log(error.response, 'register');
   }
 };
 
@@ -173,14 +166,18 @@ const login = (dispatch) => async ({wallet, password}) => {
 
     setIsSending(dispatch, false);
 
+    console.log(res.data, 'lol');
     if (res.status === 200) {
       await AsyncStorage.setItem('token', res.data.session_token);
+      await AsyncStorage.setItem('username', res.data.username);
 
       dispatch({
         type: 'login',
         payload: res.data.session_token,
         balance: res.data.wallet_bal,
         transactions: res.data.transactions,
+        username: res.data.username,
+        wallet_id: res.data.wallet_id,
       });
 
       // console.log(state);
@@ -193,13 +190,23 @@ const login = (dispatch) => async ({wallet, password}) => {
     }
   } catch (error) {
     setIsSending(dispatch, false);
+
+    if (error.response.status === 404) {
+      return dispatch({
+        type: 'set_response',
+        status: false,
+        kind: 'error',
+        payload: 'Account does not exist',
+      });
+    }
+
     dispatch({
       type: 'set_response',
       status: false,
       kind: 'error',
-      payload: 'An Error Occurred',
+      payload: error.response.data,
     });
-    console.log(error.response);
+    console.log(error.response.data, 'login');
   }
 };
 
@@ -216,7 +223,7 @@ const sendFcmToken = (dispatch) => async ({fcmToken}) => {
     //   payload: `${firstname} Added Successfully!`,
     // });
 
-    console.log(res.status);
+    console.log(res.data);
   } catch (error) {
     console.log(error);
   }
@@ -266,28 +273,26 @@ const fetchUser = (dispatch) => async ({amount, walletName, sort, wallet}) => {
     }
 
     const res = await trackerApi.get(`wallet/${sort}/${wallet}`);
-    // dispatch({
-    //   type: 'fund_wallet',
-    //   payload: res.data.transaction_ref,
-    //   balance: res.data.wallet_bal,
-    // });
 
-    dispatch({
-      type: 'set_response',
-      status: true,
-      kind: 'success',
-      payload: res.data.response,
-    });
-
-    console.log(res.data);
     if (res.status === 200) {
-      RootNavigation.navigate('SummaryScreen', {
-        action: 'transfer',
-        data: res.data,
-        amount,
-        walletName,
-        sort,
-      });
+      if (!res.data.found) {
+        setIsSending(dispatch, false);
+        return dispatch({
+          type: 'set_response',
+          status: false,
+          kind: 'error',
+          payload: 'Wallet does not exist!',
+        });
+        // RootNavigation.navigate('SummaryScreen')
+      } else {
+        RootNavigation.navigate('SummaryScreen', {
+          action: 'transfer',
+          data: res.data,
+          amount,
+          walletName,
+          sort,
+        });
+      }
     }
     setIsSending(dispatch, false);
   } catch (error) {
@@ -296,9 +301,9 @@ const fetchUser = (dispatch) => async ({amount, walletName, sort, wallet}) => {
   }
 };
 
-const transfer = (dispatch) => async ({wallet, sort, amount}) => {
+const transfer = (dispatch) => async ({wallet, sort, amount, username}) => {
   setIsSending(dispatch, true);
-  console.log(wallet, sort, amount);
+
   try {
     const res = await trackerApi.post('transfer', {
       wallet_id: wallet,
@@ -309,6 +314,8 @@ const transfer = (dispatch) => async ({wallet, sort, amount}) => {
     dispatch({
       type: 'transfer',
       payload: res.data.transaction,
+      balance: res.data.wallet_bal,
+      transactions: res.data.transactions,
     });
 
     dispatch({
@@ -318,15 +325,45 @@ const transfer = (dispatch) => async ({wallet, sort, amount}) => {
       payload: res.data.response,
     });
 
+    console.log(res.data);
+
     RootNavigation.navigate('SuccessScreen', {
       action: 'transfer',
-      amount: amount,
+      amount,
+      username,
     });
     setIsSending(dispatch, false);
   } catch (error) {
     console.log(error.response);
     setIsSending(dispatch, false);
   }
+};
+
+const balance = (dispatch) => async ({transaction, balance, transactions}) => {
+  dispatch({
+    type: 'balance',
+    payload: transaction,
+    balance: balance,
+    transactions: transactions,
+  });
+};
+
+const sendAmount = (dispatch) => async ({amount, balance}) => {
+  dispatch({type: 'clear_response'});
+  setIsSending(dispatch, true);
+
+  if (amount > balance) {
+    dispatch({
+      type: 'set_response',
+      status: false,
+      kind: 'error',
+      payload: 'Insucfficient Balance!',
+    });
+    return setIsSending(dispatch, false);
+  }
+
+  setIsSending(dispatch, false);
+  RootNavigation.navigate('AccountScreen', {amount});
 };
 
 const tryLocalSignin = (dispatch) => async () => {
@@ -345,8 +382,9 @@ const tryLocalSignin = (dispatch) => async () => {
 const signout = (dispatch) => async () => {
   RootNavigation.navigate('Auth');
   await AsyncStorage.removeItem('token');
-  await AsyncStorage.removeItem('balance');
-  await AsyncStorage.removeItem('transactions');
+  await AsyncStorage.removeItem('userId');
+  await AsyncStorage.removeItem('userRole');
+  await AsyncStorage.removeItem('user');
   setIsSending(dispatch, false);
   dispatch({type: 'signout'});
 };
@@ -363,8 +401,10 @@ export const {Provider, Context} = createDataContext(
     sendFcmToken,
     fundWallet,
     fetchUser,
-    signout,
     transfer,
+    sendAmount,
+    signout,
+    balance,
     clearResponse,
     tryLocalSignin,
   },

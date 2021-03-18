@@ -52,7 +52,7 @@ const WalletCard = (props) => {
           style={{width: '100%', height: '90%'}}
           source={require('../../assets/images/png/giro-logo.png')}
         /> */}
-        <TouchableOpacity onPress={onPress}>
+        {/* <TouchableOpacity onPress={onPress}>
           <Text
             style={{
               color: Colors.PRIMARY,
@@ -62,7 +62,7 @@ const WalletCard = (props) => {
             }}>
             Fund Wallet
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </Card>
   );

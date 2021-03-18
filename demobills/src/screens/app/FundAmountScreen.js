@@ -25,13 +25,12 @@ const {width, height} = Dimensions.get('screen');
 const CabaEnterAmountScreen = (props) => {
   const {navigation, route} = props;
 
-  const {state, fundWallet, response, clearResponse} = useContext(AppContext);
+  const {state, fundWallet, sendAmount, clearResponse} = useContext(AppContext);
 
   const {action} = route.params;
 
   const [amount, setAmount] = useState('');
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -41,15 +40,18 @@ const CabaEnterAmountScreen = (props) => {
     setAmount(amount);
   };
 
+  let {response, isSending, balance} = state;
+
   const nextHandler = () => {
-    setLoading(true);
+    balance = balance.replace(/[^0-9.-]+/g, '');
+
+    balance = +balance;
+
     if (action === 'transfer') {
-      navigation.navigate('AccountScreen', {amount});
+      sendAmount({amount, balance});
     } else {
       setTimeout(() => {
         fundWallet({amount});
-        // navigation.navigate('SuccessScreen', {action: 'fund'});
-        setLoading(false);
       }, 3000);
     }
   };
@@ -87,7 +89,9 @@ const CabaEnterAmountScreen = (props) => {
         )}
       </View>
       {response && (
-        <Text style={{color: Colors.WHITE}}>{response.message}</Text>
+        <Text style={{color: Colors.RED, textAlign: 'center'}}>
+          {response.message}
+        </Text>
       )}
       <BottomCard style={{backgroundColor: Colors.BLACK}}>
         <View
@@ -121,9 +125,9 @@ const CabaEnterAmountScreen = (props) => {
         />
 
         <AppButton style={styles.button} onPress={nextHandler}>
-          {loading && <ActivityIndicator color={Colors.WHITE} />}
+          {isSending && <ActivityIndicator color={Colors.WHITE} />}
 
-          {!loading && <Text style={styles.buttonText}>Continue</Text>}
+          {!isSending && <Text style={styles.buttonText}>Continue</Text>}
         </AppButton>
       </BottomCard>
     </AppScreenWithoutScroll>

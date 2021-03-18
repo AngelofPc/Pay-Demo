@@ -33,26 +33,30 @@ const navigationOptions = {
 
 const GiroNavigator = () => {
   const [token, setToken] = React.useState(null);
+  const [user, setUser] = React.useState(null);
 
+  // console.log(token, user);
   const check = async () => {
     const re = await AsyncStorage.getItem('token');
+    const username = await AsyncStorage.getItem('username');
     // console.log(re, 're');
     setToken(re);
+    setUser(username);
     // return re;
   };
 
   check();
-  console.log(token);
+  // console.log(token);
   return (
     <NavigationContainer ref={navigationRef}>
       <DemoPayStack.Navigator>
-        {!token && (
-          <DemoPayStack.Screen
-            name="Auth"
-            component={AuthNavigator}
-            options={navigationOptions}
-          />
-        )}
+        {/* {!token && !user && ( */}
+        <DemoPayStack.Screen
+          name="Auth"
+          component={AuthNavigator}
+          options={navigationOptions}
+        />
+        {/* )} */}
 
         <DemoPayStack.Screen
           name="App"

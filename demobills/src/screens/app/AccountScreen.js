@@ -24,28 +24,21 @@ const {width, height} = Dimensions.get('window');
 
 const banksData = [
   {id: '0', name: 'DemoPay', sort: '10001'},
-  {id: '1', name: 'FeatherPay', sort: '10002'},
-  {id: '2', name: 'Eyowo', sort: '100009'},
-  {id: '4', name: 'Opay', sort: '100009'},
-  {id: '5', name: 'Paga', sort: '100009'},
-  // {id: '6', name: 'Kuda Bank'},
-  // {id: '7', name: 'Polaris Bank'},
-  // {id: '8', name: 'United Bank for Africa'},
+  {id: '1', name: 'FeatherPay', sort: '10003'},
 ];
 
 const AccountScreen = (props) => {
-  const {fetchUser, isSending} = useContext(AppContext);
+  const {fetchUser, state} = useContext(AppContext);
 
+  const {response, isSending} = state;
   const {navigation, route} = props;
 
   const {amount} = route.params;
 
-  const [wallet, setWallet] = useState('ade@giroct.com');
-  const [walletName, setWalletName] = useState('DemoPay');
+  const [wallet, setWallet] = useState('');
+  const [walletName, setWalletName] = useState('Select Wallet');
   const [sort, setSort] = useState(10001);
   const [visible, setVisible] = useState(false);
-
-  const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -74,12 +67,6 @@ const AccountScreen = (props) => {
     <AppScreenWithoutScroll style={{paddingHorizontal: RFValue(20)}}>
       <View>
         <View style={{marginBottom: RFValue(30)}}>
-          {/* <BackBtn
-            color={Colors.BLACK}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          /> */}
           <View
             style={{
               paddingTop: RFValue(20),
@@ -111,24 +98,10 @@ const AccountScreen = (props) => {
             setWallet(wallet);
           }}
           value={wallet}
-          placeholder="WalletID"
+          placeholder="Wallet Id"
         />
-        {/* <AppLabelledInput
-          editable={fals`e}
-          onFocus={() => {
-            console.log('Sss');
-            toggleOverlay();
-          }}
-          value={walletName}
-          inputLabel="Select Bank"
-        /> */}
-        <View style={{position: 'relative'}}>
-          {/* <View style={styles.inputLabelContainer}>
-            <Text style={{...styles.inputLabel, color: Colors.BROWN}}>
-              Select Wallet
-            </Text>
-          </View> */}
 
+        <View style={{position: 'relative'}}>
           <TouchableOpacity
             onPress={() => {
               toggleOverlay();
@@ -147,6 +120,17 @@ const AccountScreen = (props) => {
           </TouchableOpacity>
           {/* <AppInput {...props} /> */}
         </View>
+        {response && (
+          <Text
+            style={{
+              color: Colors.PRIMARY,
+              fontFamily: Fonts.Mont.MEDIUM,
+              fontSize: RFValue(15),
+              textAlign: 'center',
+            }}>
+            {response.message}
+          </Text>
+        )}
       </View>
       <AppButton
         style={{marginBottom: RFValue(20)}}

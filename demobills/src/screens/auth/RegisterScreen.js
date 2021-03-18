@@ -26,9 +26,9 @@ const {height} = Dimensions.get('screen');
 const LoginScreen = (props) => {
   const {state, register, clearResponse} = useContext(AppContext);
 
-  const [username, setUsername] = useState('ace');
-  const [wallet, setWallet] = useState('aceoluwapelumi101');
-  const [password, setPassword] = useState('12345678');
+  const [username, setUsername] = useState('');
+  const [wallet, setWallet] = useState('');
+  const [password, setPassword] = useState('');
   // const [isSending, setIsSending] = useState(false);
   const {isSending, response} = state;
 
@@ -45,37 +45,23 @@ const LoginScreen = (props) => {
   const {navigation} = props;
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.BLACK}}>
-      <View>
-        <View style={styles.back}>
-          {/* <Icon
-            size={20}
-            name="chevron-left"
-            type="font-awesome"
-            color={Colors.WHITE}
-            onPress={() => navigation.goBack()}
-          /> */}
-        </View>
-        <View style={styles.imageContainer}>
-          <DemoPayLogo />
-          {/* <Image
-            // style={{width: '100%', height: height / 3.1}}
-            resizeMode="contain"
-            source={require('../../assets/images/png/giro-logo.png')}
-          /> */}
-        </View>
-        <Text style={styles.welcomeText}>Register </Text>
-        {response && (
-          <Text style={{color: Colors.RED, textAlign: 'center'}}>
-            {response.message}
-          </Text>
-        )}
-      </View>
       <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
+        <View style={{marginBottom: RFPercentage(14)}}>
+          <View style={styles.imageContainer}>
+            <DemoPayLogo />
+          </View>
+          <Text style={styles.welcomeText}>Register </Text>
+          {response && (
+            <Text style={{color: Colors.RED, textAlign: 'center'}}>
+              {response.message}
+            </Text>
+          )}
+        </View>
         {/* <BottomCard> */}
         <View style={{marginVertical: RFValue(10)}}>
           <AppInput
             color={Colors.WHITE}
-            placeholder="usernmae"
+            placeholder="username"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}
@@ -86,7 +72,6 @@ const LoginScreen = (props) => {
           <AppInput
             color={Colors.WHITE}
             placeholder="wallet Id"
-            keyboardType="number-pad"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}
@@ -140,7 +125,7 @@ const LoginScreen = (props) => {
   );
 };
 
-LoginScreen.setOptions = {
+LoginScreen.setOptions = {virt
   headerShown: true,
   title: 'My home',
   headerStyle: {

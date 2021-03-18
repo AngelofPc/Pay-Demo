@@ -31,8 +31,8 @@ const {height} = Dimensions.get('screen');
 const LoginScreen = (props) => {
   const {state, login, clearResponse} = useContext(AppContext);
 
-  const [wallet, setWallet] = useState('angelofpc101');
-  const [password, setPassword] = useState('12345678');
+  const [wallet, setWallet] = useState('');
+  const [password, setPassword] = useState('');
   // const [isSending, setIsSending] = useState(false);
   const {isSending, response} = state;
 
@@ -46,33 +46,23 @@ const LoginScreen = (props) => {
   const {navigation} = props;
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.BLACK}}>
-      <View>
-        <View style={styles.back}>
-          <Icon
-            size={20}
-            name="chevron-left"
-            type="font-awesome"
-            color={Colors.WHITE}
-            onPress={() => navigation.goBack()}
-          />
-        </View>
-        <View style={styles.imageContainer}>
-          <DemoPayLogo />
-          {/* <Image
-            // style={{width: '100%', height: height / 3.1}}
-            resizeMode="contain"
-            source={require('../../assets/images/png/giro-logo.png')}
-          /> */}
-        </View>
-        <Text style={styles.welcomeText}>Login </Text>
-      </View>
       <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
+        <View style={{marginBottom: RFPercentage(16)}}>
+          <View style={styles.imageContainer}>
+            <DemoPayLogo />
+          </View>
+          <Text style={styles.welcomeText}>Login </Text>
+          {response && (
+            <Text style={{color: Colors.RED, textAlign: 'center'}}>
+              {response.message}
+            </Text>
+          )}
+        </View>
         {/* <BottomCard> */}
         <View style={{marginVertical: RFValue(10)}}>
           <AppInput
             color={Colors.WHITE}
-            placeholder="Email"
-            keyboardType="number-pad"
+            placeholder="Wallet Id"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}
@@ -158,7 +148,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   imageContainer: {
-    marginTop: RFValue(140),
+    // marginTop: RFValue(140),
     width: '100%',
     height: RFValue(150),
     justifyContent: 'center',

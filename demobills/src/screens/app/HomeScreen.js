@@ -21,6 +21,7 @@ import {Context as AppContext} from '../../context/AppContext';
 
 import Colors from '../../styles/Colors';
 import Fonts from '../../styles/Fonts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,7 +31,7 @@ const CabaTransactionModelScreen = (props) => {
   const [visible, setVisible] = useState(false);
   const [fcmToken, setfcmToken] = useState(null);
 
-  const {sendFcmToken, state, login, clearResponse} = useContext(AppContext);
+  const {sendFcmToken, state} = useContext(AppContext);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -42,46 +43,22 @@ const CabaTransactionModelScreen = (props) => {
     sendFcmToken({fcmToken});
   }, [fcmToken]);
 
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      // Prevent default behavior of leaving the screen
+      e.preventDefault();
+    }),
+      [navigation];
+  });
+
   const getFcmToken = async () => {
-    const fcmToken = await messaging().getToken();
-    if (fcmToken) {
-      console.log(fcmToken);
-      console.log('Your Firebase Token is:', fcmToken);
-    } else {
-      console.log('Failed', 'No token received');
+    const appFcmToken = await messaging().getToken();
+    if (appFcmToken) {
+      setfcmToken(appFcmToken);
     }
   };
-
-  const {balance, transactions} = state;
-
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     Alert.alert('Hold on!', 'Are you sure you want to go back?', [
-  //       {
-  //         text: 'Cancel',
-  //         onPress: () => null,
-  //         style: 'cancel',
-  //       },
-  //       {
-  //         text: 'YES',
-  //         onPress: async () => {
-  //           await AsyncStorage.removeItem('token');
-  //           await AsyncStorage.removeItem('balance');
-  //           await AsyncStorage.removeItem('transactions');
-  //           BackHandler.exitApp();
-  //         },
-  //       },
-  //     ]);
-  //     return true;
-  //   };
-
-  //   const backHandler = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     backAction,
-  //   );
-
-  //   return () => backHandler.remove();
-  // }, []);
+  const {balance, transactions, username, wallet_id} = state;
+  const [user, setUser] = useState(username);
 
   const transactionCard = ({item}) => {
     return (
@@ -129,29 +106,41 @@ const CabaTransactionModelScreen = (props) => {
             marginBottom: RFValue(20),
             alignItems: 'center',
           }}>
-          <Image
-            source={require('../../assets/images/png/image.jpg')}
-            style={{width: 60, height: 60, borderRadius: 15}}
-          />
+          <View
+            style={{
+              height: 60,
+              width: 60,
+              borderRadius: 15,
+              backgroundColor: Colors.PRIMARY,
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: RFValue(20),
+                color: Colors.WHITE,
+                fontFamily: Fonts.Mont.BOLD,
+                // alignSelf: 'center',
+              }}>
+              {user && user.charAt(0).toUpperCase()}
+            </Text>
+          </View>
+
           <View style={{marginLeft: RFValue(20)}}>
             <Text
               style={{fontFamily: Fonts.Mont.SEMIBOLD, fontSize: RFValue(16)}}>
-              Helena Ojo-Daniels
+              {wallet_id}
             </Text>
             <Text style={{fontFamily: Fonts.Mont.BLACK, fontSize: RFValue(15)}}>
-              @henoj34
+              @{user}
             </Text>
           </View>
         </View>
         <WalletCard
-          // color={Colors.PRIMARY}
-          walletID="0124545454"
           textColor={Colors.WHITE}
           amount={balance}
-          cashback="65"
-          subtractedAmount="6,500"
           onPress={() => {
-            navigation.navigate('FundAmountScreen');
+            navigation.navigate('FundAmountScreen', {action: 'fund'});
           }}
         />
       </View>

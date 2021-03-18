@@ -11,7 +11,7 @@ const {width, height} = Dimensions.get('screen');
 
 const CabaEnterAmountScreen = (props) => {
   const {navigation, route} = props;
-  const {action} = route.params;
+  const {action, amount} = route.params;
 
   return (
     <AppScreenWithoutScroll
@@ -62,13 +62,14 @@ const CabaEnterAmountScreen = (props) => {
           {action === 'fund' && (
             <Text style={styles.text}>
               Your wallet has been funded with
-              <Text style={styles.bold}>N7,500 </Text> successfully.
+              <Text style={styles.bold}> ₦{amount} </Text> successfully.
             </Text>
           )}
           {action === 'transfer' && (
             <Text style={styles.text}>
-              Your transaction of ₦{route.params.amount} with {'\n'}
-              <Text style={styles.bold}>Gboriyemi David</Text> was successful.
+              Your transfer of ₦{amount} to {'\n'}
+              <Text style={styles.bold}>{route.params.username}</Text> was
+              successful.
             </Text>
           )}
         </View>
