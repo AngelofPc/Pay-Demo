@@ -25,7 +25,9 @@ const {width, height} = Dimensions.get('screen');
 const CabaEnterAmountScreen = (props) => {
   const {navigation, route} = props;
 
-  const {state, fundWallet, sendAmount, clearResponse} = useContext(AppContext);
+  const {state, fundWallet, sendAmount, withdraw, clearResponse} = useContext(
+    AppContext,
+  );
 
   const {action} = route.params;
 
@@ -43,16 +45,20 @@ const CabaEnterAmountScreen = (props) => {
   let {response, isSending, balance} = state;
 
   const nextHandler = () => {
-    balance = balance.replace(/[^0-9.-]+/g, '');
-
-    balance = +balance;
-
     if (action === 'transfer') {
+      balance = balance.replace(/[^0-9.-]+/g, '');
+
+      balance = +balance;
+
       sendAmount({amount, balance});
+    } else if (action === 'withdraw') {
+      balance = balance.replace(/[^0-9.-]+/g, '');
+
+      balance = +balance;
+
+      withdraw({amount, balance, action});
     } else {
-      setTimeout(() => {
-        fundWallet({amount});
-      }, 3000);
+      fundWallet({amount});
     }
   };
 

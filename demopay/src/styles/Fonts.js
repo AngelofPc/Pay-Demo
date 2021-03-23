@@ -11,10 +11,17 @@ export default {
     BLACK: 'Montserrat-Black',
   },
   Muli: {
-    EXTRALIGHT: 'Muli-ExtraLight',
-    LIGHT: 'Muli-Light',
-    REGULAR: 'Muli',
-    SEMIBOLD: 'Muli-SemiBold',
-    BOLD: 'Muli-Bold',
+    EXTRALIGHT: 'Montserrat-ExtraLight',
+    LIGHT: 'Montserrat-Light',
+    REGULAR: 'Montserrat-Regular',
+    SEMIBOLD: 'Montserrat-SemiBold',
+    BOLD: 'Montserrat-Bold',
   },
+  // Muli: {
+  //   EXTRALIGHT: 'Muli-ExtraLight',
+  //   LIGHT: 'Muli-Light',
+  //   REGULAR: 'Muli',
+  //   SEMIBOLD: 'Muli-SemiBold',
+  //   BOLD: 'Muli-Bold',
+  // },
 };

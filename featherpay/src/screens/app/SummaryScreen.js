@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   Text,
@@ -19,18 +19,19 @@ import {DetailCard} from '../../components/section/ActionCard';
 import {StatusImageAlert} from '../../components/global/Alert';
 
 const {height} = Dimensions.get('screen');
+import {Context as AppContext} from '../../context/AppContext';
 
 const CabaTransactionSummaryScreen = (props) => {
   const {navigation, route} = props;
 
-  const {action} = route.params;
+  const {state, transfer} = useContext(AppContext);
 
-  const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const {isSending, response} = state;
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
+  const {action, amount, data, walletName, sort} = route.params;
+
+  const wallet = data.wallet_id;
+  const username = data.username;
 
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.BLACK}}>
@@ -52,82 +53,31 @@ const CabaTransactionSummaryScreen = (props) => {
       </View>
       <ImageAlert
         style={{position: 'absolute', bottom: 0, width: '100%'}}
-        image={require('../../assets/images/png/image-avatar.png')}>
+        initial={data.username.charAt(0).toUpperCase()}
+        // image={require('../../assets/images/png/image-avatar.png')}
+      >
         <View style={styles.textGroup}>
-          <Text style={styles.bankname}>Kuda Microfinance Bank</Text>
-          <Text style={styles.username}>Bonaventure Christopher</Text>
+          <Text style={styles.bankname}>{walletName}</Text>
+          <Text style={styles.username}>{data.username}</Text>
         </View>
 
-        <DetailCard leftText="Account Number" rightText="00125454547" />
-        <DetailCard leftText="Amount" rightText="N200" />
-        <DetailCard leftText="Convenience Charge" rightText="N7700" />
-        <DetailCard leftText="Total" rightText="N7700" />
+        <DetailCard leftText="Wallet Id" rightText={data.wallet_id} />
+        <DetailCard leftText="Amount" rightText={'₦' + amount} />
+        <DetailCard
+          leftText="Convenience Charge"
+          rightText={'₦' + data.charge}
+        />
+        <DetailCard leftText="Total" rightText={'₦' + amount} />
         <View style={{marginVertical: RFValue(10), marginTop: RFPercentage(8)}}>
-          {/* <AppLabelledInput inputLabel="Transaction Pin" /> */}
           <AppButton
             onPress={() => {
-              setLoading(true);
-              navigation.navigate('PinScreen', {action: 'transfer'});
+              transfer({wallet, sort, amount, username, data});
             }}>
-            Proceed
-            {/* {loading && <ActivityIndicator color={Colors.WHITE} />} */}
+            {!isSending && 'Proceed'}
+            {isSending && <ActivityIndicator color={Colors.WHITE} />}
           </AppButton>
         </View>
       </ImageAlert>
-      {/* Success Overlay */}
-      {/* <Overlay
-        overlayStyle={{
-          width: '100%',
-          height: height / 2.5,
-          position: 'absolute',
-          flex: 1,
-          bottom: 0,
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-        }}
-        isVisible={visible}
-        onBackdropPress={toggleOverlay}>
-        <View>
-          <StatusImageAlert
-            style={{elevation: 0}}
-            image={require('../../assets/images/png/verified-icon.png')}>
-            <View style={{marginVertical: RFPercentage(5)}}>
-              <View style={{alignItems: 'center'}}>
-                <Text
-                  style={{
-                    marginVertical: RFPercentage(1),
-                    fontSize: RFPercentage(2),
-                    color: Colors.PRIMARY,
-                    fontFamily: Fonts.Muli.BOLD,
-                  }}>
-                  Transaction Success
-                </Text>
-                <Text
-                  style={{
-                    fontSize: RFPercentage(2),
-                    textAlign: 'center',
-                    color: Colors.BLACK,
-                    fontFamily: Fonts.Muli.REGULAR,
-                  }}>
-                  Your transaction of N7,500 with {'\n'}
-                  <Text style={{fontFamily: Fonts.Muli.BOLD}}>
-                    Gboriyemi David
-                  </Text>{' '}
-                  was successful.
-                </Text>
-              </View>
-              <AppButton
-                onPress={() => {
-                  setVisible(false);
-                  
-                }}
-                style={{marginTop: RFPercentage(4)}}>
-                Proceed to Dashboard
-              </AppButton>
-            </View>
-          </StatusImageAlert>
-        </View>
-      </Overlay> */}
     </AppScreenWithoutScroll>
   );
 };

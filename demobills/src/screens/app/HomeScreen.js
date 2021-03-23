@@ -132,7 +132,7 @@ const CabaTransactionModelScreen = (props) => {
               {wallet_id}
             </Text>
             <Text style={{fontFamily: Fonts.Mont.BLACK, fontSize: RFValue(15)}}>
-              @{user}
+              {user}
             </Text>
           </View>
         </View>
@@ -148,78 +148,95 @@ const CabaTransactionModelScreen = (props) => {
         style={{
           paddingHorizontal: RFValue(20),
           marginVertical: RFValue(20),
-          fontFamily: Fonts.Muli.BOLD,
+          fontFamily: Fonts.Mont.REGULAR,
           fontSize: RFPercentage(2),
         }}>
         Wallet Actions
       </Text>
       <View style={{paddingHorizontal: RFValue(20), marginBottom: RFValue(20)}}>
         <View style={styles.cardContainer}>
-          <View style={styles.card}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('FundAmountScreen', {action: 'fund'});
+            }}
+            style={styles.card}>
             <View
               style={{...styles.arrowContainer, backgroundColor: '#00DDB3'}}>
               <Icon
                 name="arrow-down-left"
                 color={Colors.WHITE}
                 type="feather"
+                size={35}
               />
             </View>
-            <TouchableOpacity
-              style={styles.linkGroup}
-              onPress={() => {
-                navigation.navigate('FundAmountScreen', {action: 'fund'});
-              }}>
-              <Text style={styles.linkText}>Add Cash</Text>
+            <View style={styles.linkGroup}>
+              <Text style={styles.linkText}>Fund Wallet</Text>
               <Icon name="arrow-right" color={Colors.BLACK} type="feather" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.card}>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('FundAmountScreen', {action: 'transfer'});
+            }}
+            style={styles.card}>
             <View
               style={{
                 ...styles.arrowContainer,
                 backgroundColor: '#DD0077',
               }}>
-              <Icon name="arrow-up-right" color={Colors.WHITE} type="feather" />
+              <Icon
+                name="arrow-up-right"
+                size={35}
+                color={Colors.WHITE}
+                type="feather"
+              />
             </View>
-            <TouchableOpacity
-              style={styles.linkGroup}
-              onPress={() => {
-                navigation.navigate('FundAmountScreen', {action: 'transfer'});
-              }}>
+            <View style={styles.linkGroup}>
               <Text style={styles.linkText}>Transfer</Text>
               <Icon name="arrow-right" color={Colors.BLACK} type="feather" />
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={{...styles.cardContainer, marginTop: RFValue(20)}}>
-          <View style={styles.card}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('FundAmountScreen', {action: 'withdraw'});
+            }}
+            style={styles.card}>
             <View
               style={{...styles.arrowContainer, backgroundColor: Colors.BLACK}}>
               <Icon
                 name="briefcase"
+                size={30}
                 // style={{transform: [{rotateZ: '135deg'}]}}
                 color={Colors.WHITE}
                 type="font-awesome-5"
               />
             </View>
-            <TouchableOpacity style={styles.linkGroup}>
+            <View style={styles.linkGroup}>
               <Text style={styles.linkText}>Withdraw</Text>
               <Icon name="arrow-right" color={Colors.BLACK} type="feather" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.card}>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={toggleOverlay} style={styles.card}>
             <View
               style={{
                 ...styles.arrowContainer,
+                borderRadius: RFValue(23),
                 backgroundColor: Colors.ACCENT,
               }}>
-              <Icon name="activity" color={Colors.WHITE} type="feather" />
+              <Icon
+                name="activity"
+                size={35}
+                color={Colors.WHITE}
+                type="feather"
+              />
             </View>
-            <TouchableOpacity style={styles.linkGroup} onPress={toggleOverlay}>
+            <View style={styles.linkGroup}>
               <Text style={styles.linkText}>History</Text>
               <Icon name="arrow-right" color={Colors.BLACK} type="feather" />
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         </View>
         <Overlay
           onBackdropPress={toggleOverlay}
@@ -259,7 +276,7 @@ const CabaTransactionModelScreen = (props) => {
 const styles = StyleSheet.create({
   cardContainer: {flexDirection: 'row', justifyContent: 'space-between'},
   card: {
-    elevation: 8,
+    elevation: 1,
     width: '48%',
     borderRadius: 10,
     padding: RFValue(15),
@@ -279,7 +296,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: RFPercentage(2),
-    fontFamily: Fonts.Muli.SEMIBOLD,
+    fontFamily: Fonts.Mont.REGULAR,
   },
   overlayStyle: {
     width: '100%',

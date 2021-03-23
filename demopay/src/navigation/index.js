@@ -4,13 +4,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthNavigator from './_authNavigator';
+import AppNavigator from './_appNavigator';
+
+// import DashboardNavigator from './_dashboardNavigator';
 // import SplashScreen from '../screens/SplashScreen';
 
 // import OnboardingNavigator from '../navigation/_onboardingNavigator';
-import AuthNavigator from './_authNavigator';
-// import DashboardNavigator from './_dashboardNavigator';
-import AppNavigator from './_appNavigator';
-
 // import CashMeNavigator from './_cashMeNavigator';
 // import CashXNavigator from './_cashXNavigator';
 // import BillPaymentNavigator from './_billPaymentsNavigator';
@@ -42,17 +42,17 @@ const GiroNavigator = () => {
   };
 
   check();
-  console.log(token);
+  // console.log(token);
   return (
     <NavigationContainer ref={navigationRef}>
       <DemoPayStack.Navigator>
-        {!token && (
-          <DemoPayStack.Screen
-            name="Auth"
-            component={AuthNavigator}
-            options={navigationOptions}
-          />
-        )}
+        {/* {!token && ( */}
+        <DemoPayStack.Screen
+          name="Auth"
+          component={AuthNavigator}
+          options={navigationOptions}
+        />
+        {/* )} */}
 
         <DemoPayStack.Screen
           name="App"

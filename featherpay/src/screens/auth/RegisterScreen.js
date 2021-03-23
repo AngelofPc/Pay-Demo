@@ -31,14 +31,19 @@ import {Context as AppContext} from '../../context/AppContext';
 const AuthActionScreen = (props) => {
   const {state, register, clearResponse} = useContext(AppContext);
 
-  const [username, setUsername] = useState('ace');
-  const [wallet, setWallet] = useState('aceoluwapelumi101');
-  const [password, setPassword] = useState('12345678');
+  const [username, setUsername] = useState('');
+  const [wallet, setWallet] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   // const [isSending, setIsSending] = useState(false);
   const {isSending, response} = state;
 
   const usernameInputHandler = (input) => {
     setUsername(input);
+  };
+
+  const emailInputHandler = (input) => {
+    setEmail(input);
   };
 
   const walletInputHandler = (input) => {
@@ -52,74 +57,60 @@ const AuthActionScreen = (props) => {
   const {navigation} = props;
   return (
     <AppScreenWithoutScroll>
-      <View>
-        <View style={styles.back}>
-          {/* <Icon
-            size={20}
-            name="chevron-left"
-            type="font-awesome"
-            color={Colors.WHITE}
-            onPress={() => navigation.goBack()}
-          /> */}
-        </View>
-        <View style={styles.imageContainer}>
-          <DemoPayLogo />
-          {/* <Image
-            // style={{width: '100%', height: height / 3.1}}
-            resizeMode="contain"
-            source={require('../../assets/images/png/giro-logo.png')}
-          /> */}
-        </View>
-        <Text style={styles.welcomeText}>Register </Text>
-        {response && (
-          <Text style={{color: Colors.RED, textAlign: 'center'}}>
-            {response.message}
-          </Text>
-        )}
-      </View>
-
       <AppKeyboardView
-        enableOnAndroid={true}
-        style={{
-          backgroundColor: Colors.ACCENT,
-          flexDirection: 'column-reverse',
-          paddingHorizontal: RFValue(20),
-        }}>
+        // enableOnAndroid={true}
+        style={styles.bottomCardKeyboardContainer}>
+        <View style={{marginBottom: RFPercentage(14)}}>
+          <View style={styles.imageContainer}>
+            <DemoPayLogo />
+          </View>
+          <Text style={styles.welcomeText}>Register </Text>
+          {response && (
+            <Text style={{color: Colors.RED, textAlign: 'center'}}>
+              {response.message}
+            </Text>
+          )}
+        </View>
+
         {/* <BottomCard style={styles.bottomCard}> */}
 
         <View
           style={{
-            marginVertical: RFValue(20),
+            // marginVertical: RFValue(20),
             marginBottom: RFPercentage(10),
           }}>
-          {/* <View style={styles.back}>
-          <Icon
-            // raised
-            name="chevron-left"
-            type="font-awesome"
-            color={Colors.BLACK}
-            size={20}
-            onPress={() => navigation.goBack()}
-          />
-          <Text style={styles.backText}>Register</Text>
-        </View> */}
           <AppInput
+            white
+            color={Colors.PRIMARY}
             placeholder="Username"
             placeholderTextColor={Colors.GREY}
             style={styles.input}
             onChangeText={usernameInputHandler}
             value={username}
           />
-
           <AppInput
-            placeholder="Email Address"
+            white
+            color={Colors.PRIMARY}
+            placeholder="Email"
+            placeholderTextColor={Colors.GREY}
+            style={{width: '100%', marginBottom: -14}}
+            rightIconSize={26}
+            onChangeText={emailInputHandler}
+            value={email}
+          />
+          <AppInput
+            white
+            color={Colors.PRIMARY}
+            placeholder="@feathertag"
             placeholderTextColor={Colors.GREY}
             style={styles.input}
             onChangeText={walletInputHandler}
             value={wallet}
           />
           <AppInput
+            color={Colors.PRIMARY}
             type="password"
+            white
             placeholder="Password"
             placeholderTextColor={Colors.GREY}
             style={styles.input}
@@ -129,7 +120,7 @@ const AuthActionScreen = (props) => {
           />
           <AppButton
             onPress={() => {
-              register({username, wallet, password});
+              register({username, email, wallet, password});
               // navigation.navigate('App');
             }}
             style={styles.button}>
@@ -176,9 +167,13 @@ const styles = StyleSheet.create({
     height: height,
     flexDirection: 'column-reverse',
   },
-  back: {
-    flexDirection: 'row',
-    marginBottom: RFValue(10),
+  bottomCardKeyboardContainer: {
+    paddingHorizontal: RFValue(20),
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
   },
   backText: {
     fontFamily: Fonts.Muli.BOLD,

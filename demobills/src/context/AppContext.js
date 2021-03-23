@@ -73,12 +73,12 @@ const appReducer = (state, action) => {
   }
 };
 
-const register = (dispatch) => async ({username, wallet, password}) => {
+const register = (dispatch) => async ({username, email, wallet, password}) => {
   try {
     dispatch({type: 'clear_response'});
     setIsSending(dispatch, true);
 
-    if (username === '' || wallet === '' || password === '') {
+    if (username === '' || wallet === '' || password === '' || email === '') {
       dispatch({
         type: 'set_response',
         status: false,
@@ -93,6 +93,7 @@ const register = (dispatch) => async ({username, wallet, password}) => {
     // await AsyncStorage.setItem('token', loginRes.data.session_token);
     const res = await trackerApi.post('register', {
       username,
+      email,
       wallet_id: wallet,
       password,
     });
@@ -211,6 +212,7 @@ const login = (dispatch) => async ({wallet, password}) => {
 };
 
 const sendFcmToken = (dispatch) => async ({fcmToken}) => {
+  dispatch({type: 'clear_response'});
   try {
     const res = await trackerApi.post('fcmtoken', {
       fcm_token: fcmToken,
@@ -230,6 +232,7 @@ const sendFcmToken = (dispatch) => async ({fcmToken}) => {
 };
 
 const fundWallet = (dispatch) => async ({amount}) => {
+  dispatch({type: 'clear_response'});
   setIsSending(dispatch, true);
   try {
     const res = await trackerApi.post('fund-wallet', {
@@ -272,7 +275,10 @@ const fetchUser = (dispatch) => async ({amount, walletName, sort, wallet}) => {
       return setIsSending(dispatch, false);
     }
 
-    const res = await trackerApi.get(`wallet/${sort}/${wallet}`);
+    const res = await trackerApi.get(
+      `transaction-summary/${sort}/${wallet}/${amount}`,
+    );
+    // const res = await trackerApi.get(`wallet/${sort}/${wallet}/${amount}`);
 
     if (res.status === 200) {
       if (!res.data.found) {
@@ -301,9 +307,15 @@ const fetchUser = (dispatch) => async ({amount, walletName, sort, wallet}) => {
   }
 };
 
-const transfer = (dispatch) => async ({wallet, sort, amount, username}) => {
+const transfer = (dispatch) => async ({
+  wallet,
+  sort,
+  amount,
+  username,
+  data,
+}) => {
   setIsSending(dispatch, true);
-
+  dispatch({type: 'clear_response'});
   try {
     const res = await trackerApi.post('transfer', {
       wallet_id: wallet,
@@ -331,6 +343,7 @@ const transfer = (dispatch) => async ({wallet, sort, amount, username}) => {
       action: 'transfer',
       amount,
       username,
+      recipient: data,
     });
     setIsSending(dispatch, false);
   } catch (error) {
@@ -340,6 +353,8 @@ const transfer = (dispatch) => async ({wallet, sort, amount, username}) => {
 };
 
 const balance = (dispatch) => async ({transaction, balance, transactions}) => {
+  dispatch({type: 'clear_response'});
+  1;
   dispatch({
     type: 'balance',
     payload: transaction,
@@ -364,6 +379,24 @@ const sendAmount = (dispatch) => async ({amount, balance}) => {
 
   setIsSending(dispatch, false);
   RootNavigation.navigate('AccountScreen', {amount});
+};
+
+const withdraw = (dispatch) => async ({amount, balance, action}) => {
+  dispatch({type: 'clear_response'});
+  setIsSending(dispatch, true);
+
+  if (amount > balance) {
+    dispatch({
+      type: 'set_response',
+      status: false,
+      kind: 'error',
+      payload: 'Insucfficient Balance!',
+    });
+    return setIsSending(dispatch, false);
+  }
+
+  setIsSending(dispatch, false);
+  RootNavigation.navigate('AccountScreen', {amount, action});
 };
 
 const tryLocalSignin = (dispatch) => async () => {
@@ -402,6 +435,7 @@ export const {Provider, Context} = createDataContext(
     fundWallet,
     fetchUser,
     transfer,
+    withdraw,
     sendAmount,
     signout,
     balance,

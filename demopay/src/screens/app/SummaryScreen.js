@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -18,19 +18,22 @@ import ImageAlert from '../../components/global/Alert';
 import {DetailCard} from '../../components/section/ActionCard';
 import {StatusImageAlert} from '../../components/global/Alert';
 
+import {Context as AppContext} from '../../context/AppContext';
+
 const {height} = Dimensions.get('screen');
 
 const CabaTransactionSummaryScreen = (props) => {
   const {navigation, route} = props;
 
-  const {action} = route.params;
+  const {state, transfer} = useContext(AppContext);
 
-  const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [isSending, setIsSending] = useState(false);
+  const {isSending, response} = state;
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
+  const {action, amount, data, walletName, sort} = route.params;
+
+  const wallet = data.wallet_id;
+  const username = data.username;
 
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.BLACK}}>
@@ -52,25 +55,28 @@ const CabaTransactionSummaryScreen = (props) => {
       </View>
       <ImageAlert
         style={{position: 'absolute', bottom: 0, width: '100%'}}
-        image={require('../../assets/images/png/image-avatar.png')}>
+        initial={data.username.charAt(0).toUpperCase()}>
         <View style={styles.textGroup}>
-          <Text style={styles.bankname}>Kuda Microfinance Bank</Text>
-          <Text style={styles.username}>Bonaventure Christopher</Text>
+          <Text style={styles.bankname}>{walletName}</Text>
+          <Text style={styles.username}>{data.username}</Text>
         </View>
 
-        <DetailCard leftText="Account Number" rightText="00125454547" />
-        <DetailCard leftText="Amount" rightText="N200" />
-        <DetailCard leftText="Convenience Charge" rightText="N7700" />
-        <DetailCard leftText="Total" rightText="N7700" />
+        <DetailCard leftText="Wallet Id" rightText={data.wallet_id} />
+        <DetailCard leftText="Amount" rightText={'₦' + amount} />
+        <DetailCard
+          leftText="Convenience Charge"
+          rightText={'₦' + data.charge}
+        />
+        <DetailCard leftText="Total" rightText={'₦' + amount} />
         <View style={{marginVertical: RFValue(10), marginTop: RFPercentage(8)}}>
           {/* <AppLabelledInput inputLabel="Transaction Pin" /> */}
           <AppButton
             onPress={() => {
-              setLoading(true);
-              navigation.navigate('PinScreen', {action: 'transfer'});
+              transfer({wallet, sort, amount, username, data});
+              // navigation.navigate('SuccessScreen', {action: 'transfer'});
             }}>
-            Proceed
-            {/* {loading && <ActivityIndicator color={Colors.WHITE} />} */}
+            {!isSending && 'Proceed'}
+            {isSending && <ActivityIndicator color={Colors.WHITE} />}
           </AppButton>
         </View>
       </ImageAlert>

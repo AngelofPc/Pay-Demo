@@ -62,14 +62,14 @@ const CabaEnterAmountScreen = (props) => {
           {action === 'fund' && (
             <Text style={styles.text}>
               Your wallet has been funded with
-              <Text style={styles.bold}> ₦{amount && amount} </Text>{' '}
-              successfully.
+              <Text style={styles.bold}> ₦{amount} </Text> successfully.
             </Text>
           )}
           {action === 'transfer' && (
             <Text style={styles.text}>
-              Your transaction of N7,500 with {'\n'}
-              <Text style={styles.bold}>Gboriyemi David</Text> was successful.
+              Your transfer of ₦{amount} to {'\n'}
+              <Text style={styles.bold}>{route.params.username}</Text> was
+              successful.
             </Text>
           )}
         </View>

@@ -26,15 +26,21 @@ const {height} = Dimensions.get('screen');
 const LoginScreen = (props) => {
   const {state, register, clearResponse} = useContext(AppContext);
 
-  const [username, setUsername] = useState('ace');
-  const [wallet, setWallet] = useState('aceoluwapelumi101');
-  const [password, setPassword] = useState('12345678');
+  const [username, setUsername] = useState('');
+  const [wallet, setWallet] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   // const [isSending, setIsSending] = useState(false);
   const {isSending, response} = state;
 
   const walletInputHandler = (input) => {
     setWallet(input);
   };
+
+  const emailInputHandler = (input) => {
+    setEmail(input);
+  };
+
   const usernameInputHandler = (input) => {
     setUsername(input);
   };
@@ -45,37 +51,28 @@ const LoginScreen = (props) => {
   const {navigation} = props;
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.ACCENT}}>
-      <View>
-        <View style={styles.back}>
-          {/* <Icon
-            size={20}
-            name="chevron-left"
-            type="font-awesome"
-            color={Colors.WHITE}
-            onPress={() => navigation.goBack()}
-          /> */}
+      <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
+        <View style={{marginBottom: RFPercentage(16)}}>
+          <View style={styles.imageContainer}>
+            <DemoPayLogo />
+          </View>
+          <Text style={styles.welcomeText}>Register </Text>
         </View>
-        <View style={styles.imageContainer}>
-          <DemoPayLogo />
-          {/* <Image
-            // style={{width: '100%', height: height / 3.1}}
-            resizeMode="contain"
-            source={require('../../assets/images/png/giro-logo.png')}
-          /> */}
-        </View>
-        <Text style={styles.welcomeText}>Register </Text>
+        {/* <BottomCard> */}
         {response && (
-          <Text style={{color: Colors.RED, textAlign: 'center'}}>
+          <Text
+            style={{
+              color: Colors.WHITE,
+              fontFamily: Fonts.Muli.SEMIBOLD,
+              textAlign: 'center',
+            }}>
             {response.message}
           </Text>
         )}
-      </View>
-      <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
-        {/* <BottomCard> */}
         <View style={{marginVertical: RFValue(10)}}>
           <AppInput
             color={Colors.WHITE}
-            placeholder="usernmae"
+            placeholder="username"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}
@@ -85,8 +82,18 @@ const LoginScreen = (props) => {
 
           <AppInput
             color={Colors.WHITE}
-            placeholder="wallet Id"
-            keyboardType="number-pad"
+            placeholder="Email"
+            placeholderTextColor={Colors.GREY}
+            style={{width: '100%', marginBottom: -14}}
+            rightIconSize={26}
+            onChangeText={emailInputHandler}
+            value={email}
+          />
+
+          <AppInput
+            color={Colors.WHITE}
+            placeholder="Phone"
+            keyboardType="phone-pad"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}
@@ -106,7 +113,7 @@ const LoginScreen = (props) => {
 
           <AppButton
             onPress={() => {
-              register({username, wallet, password});
+              register({username, email, wallet, password});
               // navigation.navigate('App');
             }}
             style={styles.button}>
@@ -127,6 +134,7 @@ const LoginScreen = (props) => {
             </Text>
             <AppLink
               onPress={() => {
+                clearResponse();
                 navigation.navigate('LoginScreen');
               }}
               color={Colors.PRIMARY}>

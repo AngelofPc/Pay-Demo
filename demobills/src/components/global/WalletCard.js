@@ -44,7 +44,12 @@ const WalletCard = (props) => {
       </View>
       <View style={{width: 100, height: 70}}>
         <View
-          style={{width: 100, height: RFValue(50), marginBottom: RFValue(10)}}>
+          style={{
+            width: 100,
+            height: RFValue(50),
+            marginTop: RFValue(5),
+            marginBottom: RFValue(10),
+          }}>
           <DemoPayLogo opacity={0.5} />
         </View>
         {/* <Image

@@ -42,24 +42,8 @@ const WalletCard = (props) => {
           ₦{amount}
         </Text>
       </View>
-      <View style={{width: 100, height: 70}}>
+      <View style={{width: 100, height: 100, marginTop: -20}}>
         <DemoPayLogo opacity={0.5} />
-        {/* <Image
-          resizeMode="contain"
-          style={{width: '100%', height: '90%'}}
-          source={require('../../assets/images/png/giro-logo.png')}
-        /> */}
-        <TouchableOpacity onPress={onPress}>
-          <Text
-            style={{
-              color: Colors.PRIMARY,
-              fontFamily: Fonts.Muli.REGULAR,
-              fontSize: RFPercentage(1.6),
-              marginLeft: RFValue(-20),
-            }}>
-            Fund Wallet
-          </Text>
-        </TouchableOpacity>
       </View>
     </Card>
   );

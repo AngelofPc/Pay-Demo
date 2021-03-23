@@ -71,7 +71,7 @@ const LoginScreen = (props) => {
 
           <AppInput
             color={Colors.WHITE}
-            placeholder="wallet Id"
+            placeholder="Email"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}
@@ -91,7 +91,7 @@ const LoginScreen = (props) => {
 
           <AppButton
             onPress={() => {
-              register({username, wallet, password});
+              register({username, email: wallet, wallet, password});
               // navigation.navigate('App');
             }}
             style={styles.button}>
@@ -125,7 +125,7 @@ const LoginScreen = (props) => {
   );
 };
 
-LoginScreen.setOptions = {virt
+LoginScreen.setOptions = {
   headerShown: true,
   title: 'My home',
   headerStyle: {

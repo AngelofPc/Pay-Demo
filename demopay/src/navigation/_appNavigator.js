@@ -1,12 +1,17 @@
 import * as React from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import HomeScreen from '../screens/app/HomeScreen';
 import AccountScreen from '../screens/app/AccountScreen';
 import SummaryScreen from '../screens/app/SummaryScreen';
+import NotificationScreen from '../screens/app/NotificationScreen';
 import SuccessScreen from '../screens/app/SuccessScreen';
 import PinScreen from '../screens/app/PinScreen';
 import FundAmountScreen from '../screens/app/FundAmountScreen';
+
+import messaging from '@react-native-firebase/messaging';
+import {Alert} from 'react-native';
 
 const WalletStack = createStackNavigator();
 
@@ -20,9 +25,70 @@ const navigationHideOptions = {
   tabBarVisible: false,
 };
 
-const AuthNavigator = () => {
+const AppNavigator = () => {
+  const navigation = useNavigation();
+  const [initialRoute, setInitialRoute] = React.useState('Auth');
+  React.useEffect(() => {
+    // requestUserPermission();
+
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert(
+        remoteMessage.notification.title,
+        remoteMessage.notification.body,
+        [
+          {
+            text: 'YES',
+            onPress: async () => {
+              console.log(remoteMessage, typeof remoteMessage, 'yes');
+              navigation.navigate('NotificationScreen', {
+                data: remoteMessage.data,
+                // transaction: remoteMessage.transaction,
+              });
+              () => null;
+            },
+          },
+        ],
+      );
+    });
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      navigation.navigate('NotificationScreen', {data: remoteMessage.data});
+      () => null;
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          Alert.alert(
+            remoteMessage.notification.title,
+            remoteMessage.notification.body,
+            [
+              {
+                text: 'YES',
+                onPress: async () => {},
+              },
+            ],
+          );
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          setInitialRoute('NotificationScreen', {data: remoteMessage.data}); // e.g. "Settings"
+        }
+        // setLoading(false);
+      });
+
+    // return unsubscribe;
+  }, []);
+
   return (
-    <WalletStack.Navigator>
+    <WalletStack.Navigator initialRouteName={initialRoute}>
       <WalletStack.Screen
         name="HomeScreen"
         component={HomeScreen}
@@ -36,6 +102,11 @@ const AuthNavigator = () => {
       <WalletStack.Screen
         name="PinScreen"
         component={PinScreen}
+        options={navigationOptions}
+      />
+      <WalletStack.Screen
+        name="NotificationScreen"
+        component={NotificationScreen}
         options={navigationOptions}
       />
       <WalletStack.Screen
@@ -57,4 +128,4 @@ const AuthNavigator = () => {
   );
 };
 
-export default AuthNavigator;
+export default AppNavigator;

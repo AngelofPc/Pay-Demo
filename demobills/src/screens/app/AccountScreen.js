@@ -22,22 +22,27 @@ import {Context as AppContext} from '../../context/AppContext';
 
 const {width, height} = Dimensions.get('window');
 
-const banksData = [
-  {id: '0', name: 'DemoPay', sort: '10001'},
-  {id: '1', name: 'FeatherPay', sort: '10003'},
-];
-
 const AccountScreen = (props) => {
   const {fetchUser, state} = useContext(AppContext);
 
   const {response, isSending} = state;
   const {navigation, route} = props;
 
-  const {amount} = route.params;
+  const {amount, action} = route.params;
+
+  let banksData;
+  if (action) {
+    banksData = [{id: '1', name: 'FeatherPay', sort: '10003'}];
+  } else {
+    banksData = [
+      {id: '0', name: 'DemoPay', sort: '10001'},
+      {id: '1', name: 'FeatherPay', sort: '10003'},
+    ];
+  }
 
   const [wallet, setWallet] = useState('');
   const [walletName, setWalletName] = useState('Select Wallet');
-  const [sort, setSort] = useState(10001);
+  const [sort, setSort] = useState('');
   const [visible, setVisible] = useState(false);
 
   const toggleOverlay = () => {

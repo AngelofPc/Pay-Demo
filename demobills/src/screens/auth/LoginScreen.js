@@ -62,7 +62,7 @@ const LoginScreen = (props) => {
         <View style={{marginVertical: RFValue(10)}}>
           <AppInput
             color={Colors.WHITE}
-            placeholder="Wallet Id"
+            placeholder="Email"
             placeholderTextColor={Colors.GREY}
             style={{width: '100%', marginBottom: -14}}
             rightIconSize={26}

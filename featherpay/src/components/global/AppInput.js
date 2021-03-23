@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   input: {
     color: Colors.BLACK,
     fontFamily: Fonts.Muli.BOLD,
-    fontSize: RFValue(10),
+    fontSize: RFValue(14),
     width: '100%',
   },
   focused: {

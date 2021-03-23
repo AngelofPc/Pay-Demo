@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import AppInput from '../../components/global/AppInput';
@@ -16,27 +17,32 @@ import AppButton from '../../components/global/AppButton';
 import {Icon, Overlay} from 'react-native-elements';
 import Card from '../../components/global/Card';
 
+import {Context as AppContext} from '../../context/AppContext';
+
 const {width, height} = Dimensions.get('window');
 
-const banksData = [
-  {id: '0', name: 'Demo Bills'},
-  {id: '1', name: 'Kuda'},
-  {id: '2', name: 'Eyowo'},
-  {id: '4', name: 'Opay'},
-  {id: '5', name: 'Paga'},
-  // {id: '6', name: 'Kuda Bank'},
-  // {id: '7', name: 'Polaris Bank'},
-  // {id: '8', name: 'United Bank for Africa'},
-];
-
 const AccountScreen = (props) => {
-  const {navigation} = props;
+  const {fetchUser, state} = useContext(AppContext);
 
-  const [account, setAccount] = useState('');
-  const [bank, setBank] = useState('Select Wallet');
+  const {navigation, route} = props;
+
+  const {response, isSending} = state;
+  const {amount, action} = route.params;
+
+  let banksData;
+  if (action) {
+    banksData = [{id: '1', name: 'FeatherPay', sort: '10003'}];
+  } else {
+    banksData = [
+      {id: '0', name: 'DemoBills', sort: '10002'},
+      {id: '1', name: 'FeatherPay', sort: '10003'},
+    ];
+  }
+
+  const [wallet, setWallet] = useState('');
+  const [walletName, setWalletName] = useState('Select Wallet');
+  const [sort, setSort] = useState('');
   const [visible, setVisible] = useState(false);
-
-  const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -47,7 +53,8 @@ const AccountScreen = (props) => {
       <Card style={{marginTop: 10}} style={styles.bankCard} height={50}>
         <TouchableOpacity
           onPress={() => {
-            setBank(item.name);
+            setWalletName(item.name);
+            setSort(item.sort);
             setVisible(false);
           }}
           style={{padding: 6, flexDirection: 'row'}}>
@@ -97,35 +104,21 @@ const AccountScreen = (props) => {
           white
           placeholderTextColor={Colors.GREY}
           inputStyle={{color: Colors.GREY}}
-          onChangeText={(account) => {
-            setAccount(account);
+          onChangeText={(wallet) => {
+            setWallet(wallet);
           }}
-          value={account}
+          value={wallet}
           placeholder="WalletID"
         />
-        {/* <AppLabelledInput
-          editable={fals`e}
-          onFocus={() => {
-            console.log('Sss');
-            toggleOverlay();
-          }}
-          value={bank}
-          inputLabel="Select Bank"
-        /> */}
-        <View style={{position: 'relative'}}>
-          {/* <View style={styles.inputLabelContainer}>
-            <Text style={{...styles.inputLabel, color: Colors.BROWN}}>
-              Select Wallet
-            </Text>
-          </View> */}
 
+        <View style={{position: 'relative'}}>
           <TouchableOpacity
             onPress={() => {
               toggleOverlay();
             }}>
             <View style={styles.selectBank}>
               <Text style={{color: Colors.GREY, fontFamily: Fonts.BOLD}}>
-                {bank}
+                {walletName}
               </Text>
               <Icon
                 name="chevron-down"
@@ -138,13 +131,28 @@ const AccountScreen = (props) => {
           {/* <AppInput {...props} /> */}
         </View>
       </View>
+      {response && (
+        <Text
+          style={{
+            color: Colors.PRIMARY,
+            fontFamily: Fonts.Mont.MEDIUM,
+            fontSize: RFValue(15),
+            textAlign: 'center',
+          }}>
+          {response.message}
+        </Text>
+      )}
       <AppButton
         style={{marginBottom: RFValue(20)}}
         onPress={() => {
-          navigation.navigate('SummaryScreen', {action: 'transfer'});
+          fetchUser({amount, walletName, sort, wallet});
+          // navigation.navigate('SummaryScreen', {action: 'transfer'});
         }}>
-        Continue
+        {isSending && <ActivityIndicator color={Colors.WHITE} />}
+
+        {!isSending && <Text style={styles.buttonText}>Continue</Text>}
       </AppButton>
+
       <Overlay
         overlayStyle={{
           width: '100%',

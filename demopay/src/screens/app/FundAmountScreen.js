@@ -25,11 +25,12 @@ const CabaEnterAmountScreen = (props) => {
   const {navigation, route} = props;
 
   const {action} = route.params;
-  const {state, fundWallet, response, clearResponse} = useContext(AppContext);
+  const {state, fundWallet, sendAmount, withdraw, clearResponse} = useContext(
+    AppContext,
+  );
 
   const [amount, setAmount] = useState('');
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -39,15 +40,35 @@ const CabaEnterAmountScreen = (props) => {
     setAmount(amount);
   };
 
+  let {response, isSending, balance} = state;
+
+  // const nextHandler = () => {
+  //   if (action === 'transfer') {
+  //     balance = balance.replace(/[^0-9.-]+/g, '');
+
+  //     balance = +balance;
+
+  //     sendAmount({amount, balance});
+  //   } else {
+  //     fundWallet({amount});
+  //   }
+  // };
+
   const nextHandler = () => {
-    setLoading(true);
     if (action === 'transfer') {
-      navigation.navigate('AccountScreen');
+      balance = balance.replace(/[^0-9.-]+/g, '');
+
+      balance = +balance;
+
+      sendAmount({amount, balance});
+    } else if (action === 'withdraw') {
+      balance = balance.replace(/[^0-9.-]+/g, '');
+
+      balance = +balance;
+
+      withdraw({amount, balance, action});
     } else {
-      setTimeout(() => {
-        fundWallet({amount});
-        setLoading(false);
-      }, 3000);
+      fundWallet({amount});
     }
   };
 
@@ -83,6 +104,11 @@ const CabaEnterAmountScreen = (props) => {
           </View>
         )}
       </View>
+      {response && (
+        <Text style={{color: Colors.RED, textAlign: 'center'}}>
+          {response.message}
+        </Text>
+      )}
       <BottomCard style={{backgroundColor: Colors.SECONDARY}}>
         <View
           style={{
@@ -115,9 +141,9 @@ const CabaEnterAmountScreen = (props) => {
         />
 
         <AppButton style={styles.button} onPress={nextHandler}>
-          {loading && <ActivityIndicator color={Colors.WHITE} />}
+          {isSending && <ActivityIndicator color={Colors.WHITE} />}
 
-          {!loading && <Text style={styles.buttonText}>Continue</Text>}
+          {!isSending && <Text style={styles.buttonText}>Continue</Text>}
         </AppButton>
       </BottomCard>
     </AppScreenWithoutScroll>

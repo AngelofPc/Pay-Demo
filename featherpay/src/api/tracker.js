@@ -3,7 +3,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const instance = axios.create({
-  baseURL: 'http://featherpay.sandbox.giroct.com/app/',
+  baseURL: 'https://featherpay.sandbox.giroct.com/app/',
   // baseURL: 'https://randomuser.me/api/',
   headers: {
     Accept: 'application/json',
