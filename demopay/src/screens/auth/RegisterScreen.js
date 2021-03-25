@@ -51,95 +51,101 @@ const LoginScreen = (props) => {
   const {navigation} = props;
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.ACCENT}}>
-      <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
-        <View style={{marginBottom: RFPercentage(16)}}>
-          <View style={styles.imageContainer}>
-            <DemoPayLogo />
+      <AppKeyboardView
+        contentContainerStyle={{backgroundColor: Colors.ACCENT}}
+        style={styles.bottomCardKeyboardContainer}>
+        <View>
+          <View
+            style={{marginBottom: RFPercentage(3), marginTop: RFValue(-70)}}>
+            <View style={styles.imageContainer}>
+              <DemoPayLogo />
+            </View>
+            <Text style={styles.welcomeText}>Register </Text>
           </View>
-          <Text style={styles.welcomeText}>Register </Text>
-        </View>
-        {/* <BottomCard> */}
-        {response && (
-          <Text
-            style={{
-              color: Colors.WHITE,
-              fontFamily: Fonts.Muli.SEMIBOLD,
-              textAlign: 'center',
-            }}>
-            {response.message}
-          </Text>
-        )}
-        <View style={{marginVertical: RFValue(10)}}>
-          <AppInput
-            color={Colors.WHITE}
-            placeholder="username"
-            placeholderTextColor={Colors.GREY}
-            style={{width: '100%', marginBottom: -14}}
-            rightIconSize={26}
-            onChangeText={usernameInputHandler}
-            value={username}
-          />
+          {/* <BottomCard> */}
 
-          <AppInput
-            color={Colors.WHITE}
-            placeholder="Email"
-            placeholderTextColor={Colors.GREY}
-            style={{width: '100%', marginBottom: -14}}
-            rightIconSize={26}
-            onChangeText={emailInputHandler}
-            value={email}
-          />
-
-          <AppInput
-            color={Colors.WHITE}
-            placeholder="Phone"
-            keyboardType="phone-pad"
-            placeholderTextColor={Colors.GREY}
-            style={{width: '100%', marginBottom: -14}}
-            rightIconSize={26}
-            onChangeText={walletInputHandler}
-            value={wallet}
-          />
-          <AppInput
-            color={Colors.WHITE}
-            type="password"
-            placeholder="Password"
-            placeholderTextColor={Colors.GREY}
-            style={{width: '100%', marginBottom: -14}}
-            rightIcon="lock"
-            onChangeText={passwordInputHandler}
-            value={password}
-          />
-
-          <AppButton
-            onPress={() => {
-              register({username, email, wallet, password});
-              // navigation.navigate('App');
-            }}
-            style={styles.button}>
-            {!isSending ? (
-              'Register'
-            ) : (
-              <ActivityIndicator color={Colors.WHITE} />
-            )}
-          </AppButton>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          {response && (
             <Text
               style={{
-                color: Colors.LIGHTGREY,
-                fontFamily: Fonts.Muli.REGULAR,
-                fontSize: RFPercentage(1.6),
+                color: Colors.WHITE,
+                fontFamily: Fonts.Muli.SEMIBOLD,
+                textAlign: 'center',
               }}>
-              Already have an account?{' '}
+              {response.message}
             </Text>
-            <AppLink
+          )}
+          <View style={{marginVertical: RFValue(4)}}>
+            <AppInput
+              color={Colors.WHITE}
+              placeholder="username"
+              placeholderTextColor={Colors.GREY}
+              style={{width: '100%', marginBottom: -14}}
+              rightIconSize={26}
+              onChangeText={usernameInputHandler}
+              value={username}
+            />
+
+            <AppInput
+              color={Colors.WHITE}
+              placeholder="Email"
+              placeholderTextColor={Colors.GREY}
+              style={{width: '100%', marginBottom: -14}}
+              rightIconSize={26}
+              onChangeText={emailInputHandler}
+              value={email}
+            />
+
+            <AppInput
+              color={Colors.WHITE}
+              placeholder="Phone"
+              keyboardType="phone-pad"
+              placeholderTextColor={Colors.GREY}
+              style={{width: '100%', marginBottom: -14}}
+              rightIconSize={26}
+              onChangeText={walletInputHandler}
+              value={wallet}
+            />
+            <AppInput
+              color={Colors.WHITE}
+              type="password"
+              placeholder="Password"
+              placeholderTextColor={Colors.GREY}
+              style={{width: '100%', marginBottom: -14}}
+              rightIcon="lock"
+              onChangeText={passwordInputHandler}
+              value={password}
+            />
+
+            <AppButton
               onPress={() => {
-                clearResponse();
-                navigation.navigate('LoginScreen');
+                register({username, email, wallet, password});
+                // navigation.navigate('App');
               }}
-              color={Colors.PRIMARY}>
-              Login
-            </AppLink>
+              style={styles.button}>
+              {!isSending ? (
+                'Register'
+              ) : (
+                <ActivityIndicator color={Colors.WHITE} />
+              )}
+            </AppButton>
+            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <Text
+                style={{
+                  color: Colors.LIGHTGREY,
+                  fontFamily: Fonts.Muli.REGULAR,
+                  fontSize: RFPercentage(1.6),
+                }}>
+                Already have an account?{' '}
+              </Text>
+              <AppLink
+                onPress={() => {
+                  clearResponse();
+                  navigation.navigate('LoginScreen');
+                }}
+                color={Colors.PRIMARY}>
+                Login
+              </AppLink>
+            </View>
           </View>
         </View>
         {/* </BottomCard> */}
@@ -213,8 +219,8 @@ const styles = StyleSheet.create({
   },
   bottomCardKeyboardContainer: {
     paddingHorizontal: RFValue(20),
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    paddingBottom: RFValue(30),
     width: '100%',
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,

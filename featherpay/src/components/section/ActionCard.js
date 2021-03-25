@@ -24,7 +24,9 @@ const ActionCard = ({icon, text, onPress}) => {
           />
         </View>
         <TouchableOpacity onPress={onPress}>
-          <Text style={styles.actionCardText}>{text}</Text>
+          <Text numberOfLines={3} style={styles.actionCardText}>
+            {text}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={{justifyContent: 'center'}}>
@@ -41,7 +43,13 @@ const ActionCard = ({icon, text, onPress}) => {
   );
 };
 
-export const DetailCard = ({icon, leftText, rightText, onPress}) => {
+export const DetailCard = ({
+  icon,
+  leftText,
+  rightText,
+  rightTextStyle,
+  onPress,
+}) => {
   return (
     <View style={{...styles.actionCardStyle, elevation: 1}}>
       <View style={styles.actionCardTextGroup}>
@@ -55,7 +63,14 @@ export const DetailCard = ({icon, leftText, rightText, onPress}) => {
         </Text>
       </View>
       <View style={{justifyContent: 'center'}}>
-        <Text style={{...styles.actionCardText, fontFamily: Fonts.Muli.BOLD}}>
+        <Text
+          numberOfLines={3}
+          style={{
+            ...styles.actionCardText,
+            ...rightTextStyle,
+            // width: '80%',
+            fontFamily: Fonts.Muli.BOLD,
+          }}>
           {rightText}
         </Text>
       </View>
@@ -73,6 +88,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 1,
     borderRadius: 10,
     padding: 15,
+    paddingLeft: 7,
     height: RFValue(50),
     marginVertical: 4,
     // flex: 8,
@@ -83,7 +99,7 @@ const styles = StyleSheet.create({
     color: Colors.BLACK,
     fontFamily: Fonts.Muli.REGULAR,
     fontSize: RFValue(14),
-    marginLeft: RFValue(15),
+    marginLeft: RFValue(12),
   },
   actionCardAmount: {
     fontFamily: Fonts.BOLD,

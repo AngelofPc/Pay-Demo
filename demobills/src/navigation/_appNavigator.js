@@ -38,9 +38,9 @@ const AppNavigator = () => {
         remoteMessage.notification.body,
         [
           {
-            text: 'YES',
+            text: 'OK',
             onPress: async () => {
-              navigation.navigate('NotificationScreen', {
+              navigation.push('NotificationScreen', {
                 data: remoteMessage.data,
                 // transaction: remoteMessage.transaction,
               });
@@ -56,7 +56,7 @@ const AppNavigator = () => {
         'Notification caused app to open from background state:',
         remoteMessage.notification,
       );
-      navigation.navigate('NotificationScreen', {data: remoteMessage.data});
+      navigation.push('NotificationScreen', {data: remoteMessage.data});
       () => null;
     });
 
@@ -70,7 +70,7 @@ const AppNavigator = () => {
             remoteMessage.notification.body,
             [
               {
-                text: 'YES',
+                text: 'OK',
                 onPress: async () => {},
               },
             ],

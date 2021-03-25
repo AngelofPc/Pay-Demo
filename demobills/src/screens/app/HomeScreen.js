@@ -53,6 +53,7 @@ const CabaTransactionModelScreen = (props) => {
 
   const getFcmToken = async () => {
     const appFcmToken = await messaging().getToken();
+
     if (appFcmToken) {
       setfcmToken(appFcmToken);
     }
@@ -60,7 +61,23 @@ const CabaTransactionModelScreen = (props) => {
   const {balance, transactions, username, wallet_id} = state;
   const [user, setUser] = useState(username);
 
+  console.log(transactions);
+  // const uniqueTransactions = new Set(transactions);
+
+  // const newTransactions = [...uniqueTransactions];
+
+  // const newTransactions = transactions.filter(
+  //   (item, index) => transactions.indexOf(item) === index,
+  // );
+
+  // console.log(newTransactions);
+
   const transactionCard = ({item}) => {
+    const {summary} = item;
+    const splitSum = summary.split('-');
+    const wallet = splitSum[0];
+    const sender = splitSum[1];
+
     return (
       <View style={styles.transactionCardStyle}>
         <View style={styles.transactionCardTextGroup}>
@@ -80,7 +97,8 @@ const CabaTransactionModelScreen = (props) => {
           </View>
           <View>
             <Text style={styles.transactionCardText}>{item.title}</Text>
-            <Text style={styles.transactionCardTo}>{item.summary}</Text>
+            <Text style={styles.transactionCardTo}>{wallet}</Text>
+            <Text style={styles.transactionCardTo}>{sender}</Text>
           </View>
         </View>
         <View style={{justifyContent: 'center'}}>
@@ -126,13 +144,26 @@ const CabaTransactionModelScreen = (props) => {
             </Text>
           </View>
 
-          <View style={{marginLeft: RFValue(20)}}>
+          <View style={{marginLeft: RFValue(10)}}>
             <Text
-              style={{fontFamily: Fonts.Mont.SEMIBOLD, fontSize: RFValue(16)}}>
-              {wallet_id}
+              style={{
+                fontFamily: Fonts.Mont.REGULAR,
+                fontSize: RFValue(12),
+              }}>
+              Wallet ID:
+              <Text
+                style={{
+                  fontFamily: Fonts.Mont.SEMIBOLD,
+                  // fontSize: RFValue(13),
+                }}>
+                {' '}
+                {wallet_id}
+              </Text>
             </Text>
-            <Text style={{fontFamily: Fonts.Mont.BLACK, fontSize: RFValue(15)}}>
-              {user}
+            <Text
+              style={{fontFamily: Fonts.Mont.REGULAR, fontSize: RFValue(12)}}>
+              Username:
+              <Text style={{fontFamily: Fonts.Mont.BOLD}}> {user}</Text>
             </Text>
           </View>
         </View>

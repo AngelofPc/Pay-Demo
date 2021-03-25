@@ -20,12 +20,19 @@ const appReducer = (state, action) => {
     case 'login':
       return {
         ...state,
+        fcm_status: false,
         token: action.payload,
         balance: action.balance,
         transactions: action.transactions,
         username: action.username,
         wallet_id: action.wallet_id,
       };
+
+case 'fcm_token':
+  return {
+    ...state,
+    fcm_status: true
+  };
 
     case 'fund_wallet':
       return {
@@ -218,12 +225,10 @@ const sendFcmToken = (dispatch) => async ({fcmToken}) => {
       fcm_token: fcmToken,
     });
 
-    // dispatch({
-    //   type: 'fcm_token',
-    //   status: true,
-    //   kind: 'success',
-    //   payload: `${firstname} Added Successfully!`,
-    // });
+    dispatch({
+      type: 'fcm_token',
+      payload: true,
+    });
 
     console.log(res.data);
   } catch (error) {
@@ -316,11 +321,14 @@ const transfer = (dispatch) => async ({
 }) => {
   setIsSending(dispatch, true);
   dispatch({type: 'clear_response'});
+
+  console.log(data, 'dataa');
   try {
     const res = await trackerApi.post('transfer', {
       wallet_id: wallet,
       wallet_sort_code: sort,
       amount,
+      recipient: data,
     });
 
     dispatch({
@@ -343,7 +351,6 @@ const transfer = (dispatch) => async ({
       action: 'transfer',
       amount,
       username,
-      recipient: data,
     });
     setIsSending(dispatch, false);
   } catch (error) {

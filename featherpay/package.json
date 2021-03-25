@@ -24,6 +24,7 @@
     "react-native-elements": "^3.2.0",
     "react-native-gesture-handler": "^1.10.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
+    "react-native-keyboard-aware-scroll-view-fix": "^0.7.5",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-responsive-fontsize": "^0.5.0",
     "react-native-safe-area-context": "^3.1.9",

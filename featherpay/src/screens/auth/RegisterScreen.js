@@ -1,34 +1,34 @@
-import React, {useContext, useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  ActivityIndicator,
-  Image,
   View,
+  Dimensions,
+  ActivityIndicator,
+  Text,
+  StyleSheet,
+  Image,
 } from 'react-native';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {Icon, normalize} from 'react-native-elements';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+
 import AppButton from '../../components/global/AppButton';
-
-import AppInput from '../../components/global/AppInput';
-
-import AppLink from '../../components/global/AppLink';
 import BottomCard from '../../components/section/BottomCard';
-import Fonts from '../../styles/Fonts';
 import Colors from '../../styles/Colors';
-
-import {Icon} from 'react-native-elements';
+import Fonts from '../../styles/Fonts';
+import AppInput from '../../components/global/AppInput';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import AppScreen, {
+  AppScreenWithoutScroll,
+} from '../../components/global/AppScreen';
+import AppLink from '../../components/global/AppLink';
 import AppKeyboardView from '../../components/global/AppKeyboardView';
 
 import DemoPayLogo from '../../assets/images/svg/featherpay-logo.svg';
-import {AppScreenWithoutScroll} from '../../components/global/AppScreen';
-
-const {width, height} = Dimensions.get('screen');
 
 import {Context as AppContext} from '../../context/AppContext';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view-fix';
+const {height} = Dimensions.get('screen');
 
-const AuthActionScreen = (props) => {
+const LoginScreen = (props) => {
   const {state, register, clearResponse} = useContext(AppContext);
 
   const [username, setUsername] = useState('');
@@ -56,11 +56,11 @@ const AuthActionScreen = (props) => {
 
   const {navigation} = props;
   return (
-    <AppScreenWithoutScroll>
-      <AppKeyboardView
-        // enableOnAndroid={true}
-        style={styles.bottomCardKeyboardContainer}>
-        <View style={{marginBottom: RFPercentage(14)}}>
+    // <AppScreenWithoutScroll style={{backgroundColor: Colors.ACCENT}}>
+
+    <AppKeyboardView style={styles.bottomCardKeyboardContainer}>
+      <View style={{}}>
+        <View style={{marginBottom: RFPercentage(4), marginTop: RFValue(-40)}}>
           <View style={styles.imageContainer}>
             <DemoPayLogo />
           </View>
@@ -71,14 +71,8 @@ const AuthActionScreen = (props) => {
             </Text>
           )}
         </View>
-
-        {/* <BottomCard style={styles.bottomCard}> */}
-
-        <View
-          style={{
-            // marginVertical: RFValue(20),
-            marginBottom: RFPercentage(10),
-          }}>
+        {/* <BottomCard> */}
+        <View style={{marginVertical: RFValue(4)}}>
           <AppInput
             white
             color={Colors.PRIMARY}
@@ -118,6 +112,7 @@ const AuthActionScreen = (props) => {
             onChangeText={passwordInputHandler}
             value={password}
           />
+
           <AppButton
             onPress={() => {
               register({username, email, wallet, password});
@@ -150,30 +145,39 @@ const AuthActionScreen = (props) => {
           </View>
         </View>
         {/* </BottomCard> */}
-      </AppKeyboardView>
-    </AppScreenWithoutScroll>
-    // </ImageBackground>
-    // {/* </KeyboardAvoidingView> */}
-    // </AppScreen>
+      </View>
+    </AppKeyboardView>
+
+    // </AppScreenWithoutScroll>
   );
 };
 
-export default AuthActionScreen;
+LoginScreen.setOptions = {
+  headerShown: true,
+  title: 'My home',
+  headerStyle: {
+    backgroundColor: Colors.WHITE,
+  },
+  headerTintColor: '#fff',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+};
 
 const styles = StyleSheet.create({
-  imageBackground: {
-    width: '100%',
-    // position: 'absolute',
-    height: height,
-    flexDirection: 'column-reverse',
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.WHITE,
   },
-  bottomCardKeyboardContainer: {
-    paddingHorizontal: RFValue(20),
+  back: {
     position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
+    top: 10,
+    left: 0,
+    marginVertical: 10,
+    marginLeft: 20,
+    flexDirection: 'row',
+    zIndex: 1000,
+    justifyContent: 'space-between',
   },
   backText: {
     fontFamily: Fonts.Muli.BOLD,
@@ -190,19 +194,40 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  text: {
+    marginVertical: normalize(10),
+    textAlign: 'center',
+    fontSize: normalize(20),
+    fontWeight: 'bold',
+    color: Colors.BLACK,
+  },
   welcomeText: {
     textAlign: 'center',
     fontFamily: Fonts.Mont.BOLD,
     fontSize: RFValue(20),
-    color: Colors.PRIMARY,
-    marginBottom: RFValue(10),
-    marginTop: RFValue(10),
+    color: Colors.BLACK,
+    marginVertical: RFValue(10),
   },
-  input: {
+  forgotPassword: {
+    color: Colors.GREY,
+    textAlign: 'right',
+    fontFamily: Fonts.Muli.BOLD,
+    marginVertical: RFValue(3),
+  },
+  bottomCardKeyboardContainer: {
+    flex: 1,
+    paddingHorizontal: RFValue(20),
+    // position: 'absolute',
+    // bottom: RFValue(30),
+    paddingBottom: RFValue(30),
     width: '100%',
-    marginBottom: -14,
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
   },
   button: {
-    marginVertical: RFValue(15),
+    marginVertical: 20,
   },
 });
+
+export default LoginScreen;

@@ -316,11 +316,13 @@ const transfer = (dispatch) => async ({
 }) => {
   setIsSending(dispatch, true);
   dispatch({type: 'clear_response'});
+
   try {
     const res = await trackerApi.post('transfer', {
       wallet_id: wallet,
       wallet_sort_code: sort,
       amount,
+      recipient: data,
     });
 
     dispatch({
@@ -330,6 +332,7 @@ const transfer = (dispatch) => async ({
       transactions: res.data.transactions,
     });
 
+    console.log(res.data);
     dispatch({
       type: 'set_response',
       status: true,
@@ -337,13 +340,10 @@ const transfer = (dispatch) => async ({
       payload: res.data.response,
     });
 
-    console.log(res.data);
-
     RootNavigation.navigate('SuccessScreen', {
       action: 'transfer',
       amount,
       username,
-      recipient: data,
     });
     setIsSending(dispatch, false);
   } catch (error) {

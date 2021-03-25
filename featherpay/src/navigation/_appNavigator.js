@@ -38,7 +38,7 @@ const AppNavigator = () => {
         remoteMessage.notification.body,
         [
           {
-            text: 'YES',
+            text: 'OK',
             onPress: async () => {
               navigation.navigate('NotificationScreen', {
                 data: remoteMessage.data,
@@ -70,7 +70,7 @@ const AppNavigator = () => {
             remoteMessage.notification.body,
             [
               {
-                text: 'YES',
+                text: 'OK',
                 onPress: async () => {},
               },
             ],

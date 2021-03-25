@@ -30,10 +30,11 @@ const CabaTransactionSummaryScreen = (props) => {
   // const [isSending, setIsSending] = useState(false);
   const {isSending, response} = state;
 
-  const {action, amount, data, walletName, sort} = route.params;
+  const {action, data, amount, walletName, sort} = route.params;
 
   const wallet = data.wallet_id;
   const username = data.username;
+  const total = data.total;
 
   return (
     <AppScreenWithoutScroll style={{backgroundColor: Colors.BLACK}}>
@@ -61,13 +62,17 @@ const CabaTransactionSummaryScreen = (props) => {
           <Text style={styles.username}>{data.username}</Text>
         </View>
 
-        <DetailCard leftText="Wallet Id" rightText={data.wallet_id} />
+        <DetailCard
+          rightTextStyle={{width: '80%'}}
+          leftText="Wallet Id"
+          rightText={data.wallet_id}
+        />
         <DetailCard leftText="Amount" rightText={'₦' + amount} />
         <DetailCard
           leftText="Convenience Charge"
           rightText={'₦' + data.charge}
         />
-        <DetailCard leftText="Total" rightText={'₦' + amount} />
+        <DetailCard leftText="Total" rightText={'₦' + total} />
         <View style={{marginVertical: RFValue(10), marginTop: RFPercentage(8)}}>
           {/* <AppLabelledInput inputLabel="Transaction Pin" /> */}
           <AppButton

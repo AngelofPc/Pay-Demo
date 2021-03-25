@@ -321,6 +321,7 @@ const transfer = (dispatch) => async ({
       wallet_id: wallet,
       wallet_sort_code: sort,
       amount,
+      recipient: data,
     });
 
     dispatch({
@@ -343,7 +344,6 @@ const transfer = (dispatch) => async ({
       action: 'transfer',
       amount,
       username,
-      recipient: data,
     });
     setIsSending(dispatch, false);
   } catch (error) {

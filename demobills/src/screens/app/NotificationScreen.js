@@ -45,7 +45,29 @@ const CabaTransactionSummaryScreen = (props) => {
   const [loading, setLoading] = useState(false);
 
   const transactions = state.transactions;
-  transactions.push(transaction);
+  // console.log(transactions);
+
+  const notifs = state.transactions;
+  const addNewNotif = (newNotif) => {
+    //check that notif with same doesn't already exist to avoid duplicate elements
+    const possibleDuplicates = notifs.filter((n) => {
+      return newNotif.id == n.id;
+    });
+    if (possibleDuplicates.length == 0) {
+      //no duplicate found
+      notifs.unshift(newNotif);
+    }
+  };
+
+  addNewNotif(transaction);
+  // console.log('Adding non-duplicate');
+  // console.log(notifs.length);
+
+  // useEffect(() => {
+  //   console.log(transactions.length, 'old');
+  //   transactions.push(transaction);
+  //   console.log(transactions.length, 'old');
+  // }, []);
 
   const toggleOverlay = () => {
     setVisible(!visible);
